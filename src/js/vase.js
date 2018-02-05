@@ -45,6 +45,13 @@
                 ajax_processing: false,
                 response_from_api_visible: true,
             },
+            //content - text
+            text_vars: {
+                wrong_input_text: "Wrong input",
+                status_success: "Form sent successfuly",
+                status_sending: "Sending form...",
+                status_error: "Server encountered and error",
+            },
             //form info
             novalidate: true,
             input: {

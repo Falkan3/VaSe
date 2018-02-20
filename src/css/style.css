@@ -1,9 +1,1 @@
-/* line 1, D:/Documents/SourceTree_Repos/Plugins/VaSe/src/scss/style.scss */
-body {
-  position: relative;
-  min-height: 100vh;
-  margin: 0;
-  overflow-x: hidden;
-}
-
-/*# sourceMappingURL=../css/style.map */
+html{font-size:14px}@media (max-width: 1199px){html{font-size:13px}}@media (max-width: 991px){html{font-size:12px}}@media (max-width: 767px){html{font-size:11px}}body{position:relative;min-height:100vh;margin:0;font-size:inherit;font-family:'Oswald', sans-serif;letter-spacing:0.1rem;overflow-x:hidden}.wrapper{padding:4rem 0}.row>div{margin-bottom:2rem}.row>div:last-child{margin-bottom:0}.input.correct-input label{color:#28bf24}.input.wrong-input label{color:#dd0009}.input .asterisk{padding:0.3rem}.input .vase--status{display:block;padding:0.5rem 0}label{display:block;margin-bottom:1rem;text-transform:uppercase;font-weight:300}input{display:block;width:100%;padding:0.5rem 0;border:none;border-bottom:solid 2px #ddd;outline:none;color:#000;letter-spacing:0.1rem;will-change:border-color;-webkit-transition:border-color ease-in-out 0.3s;-moz-transition:border-color ease-in-out 0.3s;-ms-transition:border-color ease-in-out 0.3s;-o-transition:border-color ease-in-out 0.3s;transition:border-color ease-in-out 0.3s}input[type="checkbox"]{width:auto}input.correct-input{border-color:#28bf24}input.wrong-input{border-color:#dd0009}.button{max-width:100%;padding:1rem 2rem;background:#ffa700;border:none;outline:none;color:#fff;font-size:1.2rem;font-weight:700;text-transform:uppercase;word-break:normal;text-decoration:none;letter-spacing:0.1rem;cursor:pointer;will-change:background;-webkit-transition:background ease-in-out 0.3s;-moz-transition:background ease-in-out 0.3s;-ms-transition:background ease-in-out 0.3s;-o-transition:background ease-in-out 0.3s;transition:background ease-in-out 0.3s}.button:hover,.button:focus,.button:active{background:#ffb933;outline:none;text-decoration:none;color:#fff}

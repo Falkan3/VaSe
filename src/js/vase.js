@@ -22,6 +22,7 @@
 
     // Create the defaults once
     var pluginName = "VaSe",
+        form_obj_prefix = 'vase--',
         input_all_mask = 'input, select, textarea',
 
         defaults = {
@@ -50,23 +51,35 @@
                 wrong_input_text: "Wrong input",
                 status_success: "Form sent successfuly",
                 status_sending: "Sending form...",
-                status_error: "Server encountered and error",
+                status_error: "Server encountered an error",
             },
             //form info
             novalidate: true,
             input: {
                 fields: [
+                    /*
                     {
                         obj: null,
-                        name: 'phone',
-                        label: 'Phone number',
+                        label: null,
                         type: 'tel',
                         data_field_type: 'phone', //possible types: phone, name, email. Used for regex_table
                         max_length: 20,
                         required: true
                     },
+                    */
+                ],
+                agreements: [
+                    /*
+                    {
+                        obj: null,
+                        type: 'checkbox',
+                        required: true,
+                        checked: true,
+                    }
+                    */
                 ],
                 regex_table: {
+                    'alpha': /^$/,
                     'phone': /(\(?(\+|00)?48\)?([ -]?))?(\d{3}[ -]?\d{3}[ -]?\d{3})|([ -]?\d{2}[ -]?\d{3}[ -]?\d{2}[ -]?\d{2})/,
                     'email': /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                     'name': /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšśžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŚŽ∂ð ,.'-]+$/
@@ -105,6 +118,12 @@
         //dynamic vars
         this.html = $('html');
 
+        //form
+        this.form = {
+            obj: null,
+            footer: null,
+        };
+
         this.init();
     }
 
@@ -120,10 +139,351 @@
             // and this.settings
             // you can add more functions like the one below and
             // call them like the example bellow
+            this.initForm();
+        },
 
+        /*
+         * Main function for initializing popup body
+         */
+        initForm: function () {
+            var objThis = this;
+
+            this.form.obj = $(this.element);
+            this.form.status =  this.form.obj.find('[data-vase-type="status"]');
+
+            //add novalidate attribute if applicable
+            if(this.settings.novalidate) {
+                this.form.obj.attr('novalidate', 'novalidate');
+            }
+
+            //find references to sections
+
+
+            //form fields
+            this.initForm_generate_fields();
+
+            //agreements
+            //this.initPopup_generate_popup_agreements($popupBody);
+
+            //apply event listeners to elements contained in popup
+            this.popupAppendEventListeners();
+
+            //apply miscellaneous plugins
+            this.formApplyMisc();
+        },
+
+        /*
+         * Builders for popup body
+         */
+        initForm_generate_fields: function () {
+            //form fields
+            var fields;
+            var field_attributes = [];
+
+            fields = this.form.obj.find('[data-vase-type="field"]');
+
+            console.log(fields)
+
+            fields.each(function() {
+                var $this = $(this);
+
+                var input_type = $this.attr('type');
+                var data_field_type = $this.data('vase-field-type');
+                if(!data_field_type) {
+                    switch(input_type) {
+                        case 'tel':
+                            data_field_type = 'phone';
+                            break;
+                        case 'email':
+                            data_field_type = 'email';
+                            break;
+                        default:
+                            data_field_type = 'alpha';
+                            break;
+                    }
+                }
+
+                field_attributes.push({
+                    obj: $this,
+                    label: $this.siblings('label'),
+                    type: input_type,
+                    data_field_type: data_field_type,
+                    max_length: $this.attr('max-length'),
+                    required: $this.prop('required')
+                });
+            });
+
+            this.settings.input.fields = field_attributes;
+        },
+
+        /*
+         * Append event listeners for clickable elements in popup window
+         */
+        popupAppendEventListeners: function () {
+            var objThis = this;
+
+            //form input blur / input
+            for(var i = 0; i < objThis.settings.input.fields.length; i++) {
+                var field = objThis.settings.input.fields[i];
+                field.obj.data('index', i);
+                field.obj.on('input', function (e) {
+                    var index = $(this).data('index');
+                    //validate input
+                    var validated = objThis.ValidateForm([objThis.settings.input.fields[index]], {append_status: false, focus_first_wrong: false});
+                    //send form if validated
+                    if (validated) {
+                        console.log('input validation successful');
+                    }
+
+                    return false;
+                });
+            }
+
+            //form agreement blur / input
+            for(var i = 0; i < objThis.settings.input.agreements.length; i++) {
+                var agreement = objThis.settings.input.agreements[i];
+                agreement.obj.data('index', i);
+                agreement.obj.on('change', function (e) {
+                    var index = $(this).data('index');
+                    //validate input
+                    var validated = objThis.ValidateForm([objThis.settings.input.agreements[index]], {append_status: false, focus_first_wrong: false});
+                    //send form if validated
+                    if (validated) {
+                        console.log('agreement validation successful');
+                    }
+
+                    return false;
+                });
+            }
+
+            //form submit
+            this.form.obj.on('submit', function (e) {
+                var status = objThis.SendData({
+                    callback: {
+                        success: {
+                            function: objThis.SendDataReturn,
+                            this: objThis,
+                            parameters: [{reset_input: true, message: objThis.settings.text_vars.status_success, style: 'success'}]
+                        },
+                        error: {
+                            function: objThis.SendDataReturn,
+                            this: objThis,
+                            parameters: [{reset_input: false, message: objThis.settings.text_vars.status_error, style: 'error'}]
+                        }
+                    }
+                });
+
+                //status
+                console.log('Submit form status: ' + status.success + ', ' + status.message);
+
+                return false;
+            });
+        },
+
+        /*
+         * Apply miscellaneous plugins (ie. input mask)
+         */
+        formApplyMisc: function () {
+            /* --- js input mask --- */
+            var inputs = this.form.obj.find(input_all_mask);
+
+            //check if exists
+            console.log('js input mask: ' + (typeof $.fn.inputmask !== 'undefined'));
+            if (typeof $.fn.inputmask !== 'undefined') {
+                var input_masked_items = inputs.filter('input[type="tel"], .jsm--phone');
+                var phones_mask = ["###-###-###", "## ###-##-##"];
+
+                console.log('js input mask || masked items: ');
+                console.log(input_masked_items);
+
+                input_masked_items.inputmask({
+                    mask: phones_mask,
+                    greedy: false,
+                    definitions: {'#': {validator: "[0-9]", cardinality: 1}}
+                });
+            }
+            /* --- /js input mask --- */
         },
 
         /* -------------------- PUBLIC METHODS -------------------- */
+
+        /* ------ Input ------ */
+
+        /**
+         * @return {{is_valid: boolean, field: *}}
+         */
+        ValidateField: function (_field, options) {
+            var defaults = {
+
+            };
+            var settings = $.extend({}, defaults, options);
+
+            var field = _field;
+            var $this = field.obj;
+
+            //return value. If all inputs are correctly validated, the value will remain true. If one fails, it switches to false
+            var is_valid = true;
+
+            /* --- Validation --- */
+
+            //special validation for select and checbkox
+            //checkbox
+            if(field.type === 'checkbox') {
+                if(field.required === true) {
+                    if (!$this.prop('checked')) {
+                        is_valid = false;
+                    }
+                }
+            }
+
+            //select
+            //todo: select validate field
+            else if(field.type === 'select') {
+                if(field.required === true) {
+                    if (!$this.prop('checked')) {
+                        is_valid = false;
+                    }
+                }
+            }
+            //rest (textfields)
+            else {
+                if(field.required === true || $this.val() !== '') {
+                    //define regex for field types
+                    var regex_table = this.settings.input.regex_table;
+
+                    if (field.data_field_type && field.data_field_type in regex_table) {
+                        var regex = regex_table[field.data_field_type];
+                        if (!regex.test($this.val())) {
+                            is_valid = false;
+                        }
+                    } else {
+                        is_valid = false;
+                    }
+                }
+            }
+
+            return {is_valid: is_valid, field: field};
+        },
+
+        /**
+         * @return {boolean}
+         */
+        ValidateForm: function (_fields, options) {
+            var defaults = {
+                append_status: true,
+                focus_first_wrong: true,
+                fade_duration: 300,
+                clear_status_only: false
+            };
+            var settings = $.extend({}, defaults, options);
+
+            var fields = _fields;
+
+            //return value. If all inputs are correctly validated, the value will remain true. If one fails, it switches to false
+            var is_valid = true;
+
+            /* --- Validation --- */
+
+            //wrong inputs collection
+            var wrong_inputs = []; // {obj: null, message: null}
+
+            for(var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                var field_valid = this.ValidateField(field);
+
+                var $this = field.obj;
+                var $this_container = $this.closest('.input');
+
+                //find and remove old status
+                var old_obj = $this_container.find('.' + form_obj_prefix + 'status');
+
+                //if appending new status, delete the old status immediately. Otherwise, fade it out slowly
+                if (settings.append_status) {
+                    old_obj.remove();
+                } else {
+                    old_obj.fadeOut(settings.fade_duration, function () {
+                        old_obj.remove();
+                    });
+                }
+
+                if(settings.clear_status_only) {
+                    $this.removeClass('correct-input');
+                    $this_container.removeClass('correct-input');
+                    $this.removeClass('wrong-input');
+                    $this_container.removeClass('wrong-input');
+                } else {
+                    if(field_valid.is_valid) {
+                        $this.removeClass('wrong-input');
+                        $this_container.removeClass('wrong-input');
+                        $this.addClass('correct-input');
+                        $this_container.addClass('correct-input');
+                    } else {
+                        $this.removeClass('correct-input');
+                        $this_container.removeClass('correct-input');
+                        $this.addClass('wrong-input');
+                        $this_container.addClass('wrong-input');
+
+                        wrong_inputs.push({field: field, message: ''});
+
+                        //add element signifying wrong input
+                        if (settings.append_status) {
+                            var $wrong_input_obj = $('<span class="' + form_obj_prefix + 'status"></span>');
+                            $wrong_input_obj.text(this.settings.text_vars.wrong_input_text);
+                            $wrong_input_obj.hide();
+
+                            $wrong_input_obj.appendTo($this_container);
+
+                            $wrong_input_obj.fadeIn(settings.fade_duration);
+                        }
+
+                        is_valid = false;
+                    }
+                }
+            }
+
+            if (settings.focus_first_wrong && wrong_inputs.length > 0) {
+                //sort by position in DOM
+                wrong_inputs = this.objSortByPositionInDOM(wrong_inputs, 'field', 'obj');
+
+                //focus first object in DOM
+                wrong_inputs[0].field.obj.focus();
+            }
+
+            //xxx
+
+            /* --- /Validation --- */
+
+            return is_valid;
+        },
+
+        SendDataReturn: function(options) {
+            var defaults = {
+                reset_input: true,
+                message: '',
+                style: '',
+            };
+            var settings = $.extend({}, defaults, options);
+
+            if(settings.reset_input) {
+                this.ResetInput({clear_status_only: true});
+            }
+            this.StatusClear();
+            this.StatusAdd(settings.message, {style: settings.style});
+        },
+
+        ResetInput: function (options) {
+            var defaults = {
+                clear_status_only: false,
+            };
+            var settings = $.extend({}, defaults, options);
+
+            var form = this.form.obj;
+            form[0].reset();
+
+            //validate after resetting the form
+            this.ValidateForm(this.settings.input.fields, {append_status: false, focus_first_wrong: false, clear_status_only: settings.clear_status_only});
+            this.ValidateForm(this.settings.input.agreements, {append_status: false, focus_first_wrong: false, clear_status_only: settings.clear_status_only});
+        },
 
         /* ------ Form data ------ */
 
@@ -136,7 +496,7 @@
             var defaults = {
                 url: this.settings.api.url,
                 api_custom: this.settings.api.custom,
-                data: this.popup.form.serialize(),
+                data: this.form.obj.serialize(),
                 data_dictionary: this.settings.input.data_dictionary,
                 type: this.settings.data.form_method,
                 success_param: this.settings.api.param.success, //bool - true for success, false for failure
@@ -148,9 +508,6 @@
 
             //remove all status messages
             this.StatusClear();
-
-            //find all input in form
-            //var input = this.popup.form.find(input_all_mask);
 
             //validate input
             var validated_fields = this.ValidateForm(this.settings.input.fields);
@@ -362,6 +719,43 @@
             return status;
         },
 
+        /* Status messages */
+
+        StatusAdd: function(_message, options) {
+            //set settings
+            var defaults = {
+                fade_duration: 300,
+                style: ''
+            };
+            var settings = $.extend({}, defaults, options);
+
+            /* --- */
+
+            var message = $('<p></p>');
+            message.text(_message);
+            message.appendTo(this.form.status);
+            message.hide();
+
+            if(settings.style === 'success') {
+                this.StatusClearStyle();
+                this.form.status.addClass('success');
+            } else if(settings.style === 'error') {
+                this.StatusClearStyle();
+                this.form.status.addClass('error');
+            }
+
+            message.fadeIn(settings.fade_duration);
+        },
+        StatusClearStyle: function() {
+            //reset css classes
+            this.form.status.removeClass('success error');
+        },
+        StatusClear: function() {
+            this.StatusClearStyle();
+            //remove contents
+            this.form.status.empty();
+        },
+
         /* ------------------------------ HELPERS ------------------------------- */
 
         /*
@@ -436,26 +830,6 @@
         }
 
         return null
-
-        /*
-        return this.each(function () {
-            if (!$.data(this, "plugin_" + pluginName)) {
-                var instance = new Plugin(this, options);
-                $.data(this, "plugin_" +
-                    pluginName, instance);
-            }
-        });
-        */
     };
-
-    /*
-    $.fn.swyftCallback = function () {
-        return {
-            DisableButton: function(input) {
-                this.DisableButton(input);
-            }
-        }
-    };
-    */
 
 })(jQuery, window, document);

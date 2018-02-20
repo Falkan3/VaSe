@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!-- Jquery -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    <!-- WOW js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <!-- Input mask -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/bindings/inputmask.binding.min.js"
-            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- Animate -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" integrity="sha256-j+P6EZJVrbXgwSR5Mx+eCS6FvP9Wq27MBRC/ogVriY0=" crossorigin="anonymous" />
 
     <!-- Main -->
     <script src="../src/js/vase.js" type="text/javascript"></script>
@@ -23,17 +24,49 @@
 </head>
 <body>
 
-<div class="container">
-    <div id="element"></div>
+<div class="wrapper">
+    <div class="container">
+        <form method="post" data-vase-type="form">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="input">
+                            <label for="fld_name">Name<span class="asterisk">*</span></label>
+                            <input id="fld_name" type="text" name="fld_name" required="required" data-vase-type="field" data-vase-field-type="name"/>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-md-6">
+                        <div class="input">
+                            <label for="fld_email">Email<span class="asterisk">*</span></label>
+                            <input id="fld_email" type="email" name="fld_email" required="required" data-vase-type="field"/>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="input">
+                            <label for="agreement_1">Agreement 1<span class="asterisk">*</span></label>
+                            <input id="agreement_1" type="checkbox" name="agreement_1" value="1" data-vase-type="agreement"/>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-md-6">
+                        <button type="submit" class="button" data-vase-type="submit">Send</button>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="status" data-vase-type="status"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>
     var x;
     $(function () {
-        // x = $( "body" ).swyftCallback( {
-        //     custom_button_class: ['wow', 'animated', 'tada', 'infinite'],
-        //     //custom_button_data: [['wow-duration', '4s']],
-        // } );
+        x = $('[data-vase-type="form"]').VaSe({});
     });
 </script>
 </body>

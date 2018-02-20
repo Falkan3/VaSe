@@ -1,14 +1,136 @@
+$font_correct: #28bf24;
+$font_wrong: #dd0009;
+
+@mixin transition($property...) {
+    -webkit-transition: $property;
+    -moz-transition: $property;
+    -ms-transition: $property;
+    -o-transition: $property;
+    transition: $property;
+}
+
+html {
+    font-size: 14px;
+
+    @media (max-width: 1199px) {
+        font-size: 13px;
+    }
+
+    @media (max-width: 991px) {
+        font-size: 12px;
+    }
+
+    @media (max-width: 767px) {
+        font-size: 11px;
+    }
+}
+
 body {
     position: relative;
     min-height: 100vh;
     margin: 0;
+    font-size: inherit;
+	font-family: 'Oswald', sans-serif;
+	letter-spacing: 0.1rem;
     overflow-x: hidden;
 }
 
-@mixin transition($property, $duration) {
-    -webkit-transition: $property $duration;
-    -moz-transition: $property $duration;
-    -ms-transition: $property $duration;
-    -o-transition: $property $duration;
-    transition: $property $duration;
+.wrapper {
+    padding: 4rem 0;
+}
+
+.row > div {
+    margin-bottom: 2rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.input {
+	&.correct-input {
+		label {
+			color: $font_correct;
+		}
+	}
+	&.wrong-input {
+		label {
+			color: $font_wrong;
+		}
+
+	}
+
+	.asterisk {
+		padding: 0.3rem;
+	}
+
+	.vase--status {
+		display: block;
+		padding: 0.5rem 0;
+	}
+}
+
+label {
+    display: block;
+    margin-bottom: 1rem;
+
+    text-transform: uppercase;
+	font-weight: 300;
+}
+
+input {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0;
+
+    border: none;
+    border-bottom: solid 2px #ddd;
+    outline: none;
+
+    color: #000;
+	letter-spacing: 0.1rem;
+
+	will-change: border-color;
+	@include transition(border-color ease-in-out 0.3s);
+
+	&[type="checkbox"] {
+		width: auto;
+	}
+
+	&.correct-input {
+		border-color: $font_correct;
+	}
+	&.wrong-input {
+		border-color: $font_wrong;
+	}
+}
+
+.button {
+    max-width: 100%;
+
+    padding: 1rem 2rem;
+
+    background: #ffa700;
+    border: none;
+    outline: none;
+
+    color: #fff;
+	font-size: 1.2rem;
+	font-weight: 700;
+	text-transform: uppercase;
+    word-break: normal;
+    text-decoration: none;
+	letter-spacing: 0.1rem;
+	cursor: pointer;
+
+	will-change: background;
+    @include transition(background ease-in-out 0.3s);
+
+    &:hover, &:focus, &:active {
+        background: lighten(#ffa700, 10%);
+		outline: none;
+
+        text-decoration: none;
+        color: #fff;
+    }
 }

@@ -1,1 +1,246 @@
-html{font-size:14px}@media (max-width: 1199px){html{font-size:13px}}@media (max-width: 991px){html{font-size:12px}}@media (max-width: 767px){html{font-size:11px}}body{position:relative;min-height:100vh;margin:0;font-size:inherit;font-family:'Oswald', sans-serif;letter-spacing:0.1rem;overflow-x:hidden}.wrapper{padding:4rem 0}.row>div{margin-bottom:2rem}.row>div:last-child{margin-bottom:0}.input.correct-input label{color:#28bf24}.input.wrong-input label{color:#dd0009}.input .asterisk{padding:0.3rem}.input .vase--status{display:block;padding:0.5rem 0}label{display:block;margin-bottom:1rem;text-transform:uppercase;font-weight:300}input{display:block;width:100%;padding:0.5rem 0;border:none;border-bottom:solid 2px #ddd;outline:none;color:#000;letter-spacing:0.1rem;will-change:border-color;-webkit-transition:border-color ease-in-out 0.3s;-moz-transition:border-color ease-in-out 0.3s;-ms-transition:border-color ease-in-out 0.3s;-o-transition:border-color ease-in-out 0.3s;transition:border-color ease-in-out 0.3s}input[type="checkbox"]{width:auto}input.correct-input{border-color:#28bf24}input.wrong-input{border-color:#dd0009}.button{max-width:100%;padding:1rem 2rem;background:#ffa700;border:none;outline:none;color:#fff;font-size:1.2rem;font-weight:700;text-transform:uppercase;word-break:normal;text-decoration:none;letter-spacing:0.1rem;cursor:pointer;will-change:background;-webkit-transition:background ease-in-out 0.3s;-moz-transition:background ease-in-out 0.3s;-ms-transition:background ease-in-out 0.3s;-o-transition:background ease-in-out 0.3s;transition:background ease-in-out 0.3s}.button:hover,.button:focus,.button:active{background:#ffb933;outline:none;text-decoration:none;color:#fff}
+/* line 19, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+html {
+  font-size: 14px;
+}
+
+@media (max-width: 1199px) {
+  /* line 19, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+  html {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 991px) {
+  /* line 19, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 767px) {
+  /* line 19, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+  html {
+    font-size: 11px;
+  }
+}
+
+/* line 35, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+body {
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  background: #1D3557;
+  color: #F1FAEE;
+  font-size: inherit;
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.1rem;
+  overflow-x: hidden;
+}
+
+/* line 49, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.wrapper {
+  padding: 4rem 0;
+}
+
+/* line 53, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.row > div {
+  margin-bottom: 2rem;
+  /*
+    &:last-child {
+        margin-bottom: 0;
+    }
+    */
+}
+
+/* line 63, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.input {
+  /*--*/
+}
+
+/* line 65, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.input.radio label, .input.checkbox label {
+  display: inline-block;
+}
+
+/* line 69, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.input.radio input, .input.checkbox input {
+  display: inline-block;
+}
+
+/* line 75, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.input.correct-input label {
+  color: #A8DADC;
+}
+
+/* line 80, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.input.wrong-input label {
+  color: #E63946;
+}
+
+/* line 84, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.input.wrong-input .vase--status {
+  color: #E63946;
+}
+
+/* line 89, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.input .asterisk {
+  padding: 0.3rem;
+}
+
+/* line 93, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.input .vase--status {
+  display: block;
+  padding: 0.5rem 0;
+  font-weight: 300;
+  will-change: color;
+}
+
+/* line 103, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.input_button {
+  text-align: right;
+}
+
+/* line 108, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  font-weight: 300;
+  will-change: color;
+  -webkit-transition: color ease-in-out 0.3s;
+  -moz-transition: color ease-in-out 0.3s;
+  -ms-transition: color ease-in-out 0.3s;
+  -o-transition: color ease-in-out 0.3s;
+  transition: color ease-in-out 0.3s;
+}
+
+/* line 119, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+  border-bottom: solid 2px #ddd;
+  outline: none;
+  letter-spacing: 0.1rem;
+  will-change: border-color;
+  -webkit-transition: border-color ease-in-out 0.3s;
+  -moz-transition: border-color ease-in-out 0.3s;
+  -ms-transition: border-color ease-in-out 0.3s;
+  -o-transition: border-color ease-in-out 0.3s;
+  transition: border-color ease-in-out 0.3s;
+}
+
+/* line 135, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+input[type="tel"], input [data-vase-field-type="phone"] {
+  letter-spacing: 0.2em;
+}
+
+/* line 139, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+input[type="checkbox"] {
+  width: auto;
+}
+
+/* line 143, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+input.correct-input {
+  border-color: #A8DADC;
+}
+
+/* line 146, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+input.wrong-input {
+  border-color: #E63946;
+}
+
+/* line 151, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.button {
+  max-width: 100%;
+  padding: 1rem 2rem;
+  background: #457B9D;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  word-break: normal;
+  text-decoration: none;
+  letter-spacing: 0.1rem;
+  cursor: pointer;
+  will-change: background;
+  -webkit-transition: background ease-in-out 0.3s;
+  -moz-transition: background ease-in-out 0.3s;
+  -ms-transition: background ease-in-out 0.3s;
+  -o-transition: background ease-in-out 0.3s;
+  transition: background ease-in-out 0.3s;
+}
+
+/* line 172, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+.button:hover, .button:focus, .button:active {
+  background: #5d95b8;
+  outline: none;
+  text-decoration: none;
+  color: #fff;
+}
+
+/* line 181, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* line 187, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+form.style-dark .input_text, form.style-dark .input_tel, form.style-dark .input_textarea {
+  position: relative;
+}
+
+/* line 190, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+form.style-dark .input_text .cut-off-corner, form.style-dark .input_tel .cut-off-corner, form.style-dark .input_textarea .cut-off-corner {
+  position: relative;
+}
+
+/* line 193, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+form.style-dark .input_text .cut-off-corner::before, form.style-dark .input_tel .cut-off-corner::before, form.style-dark .input_textarea .cut-off-corner::before {
+  content: "";
+  position: absolute;
+  width: 0.5rem;
+  height: 0.5rem;
+  top: 0;
+  left: 0;
+  border: solid 0.5rem #1D3557;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+  z-index: 1;
+}
+
+/* line 214, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+form.style-dark .input_text input, form.style-dark .input_tel input, form.style-dark .input_textarea input {
+  padding: 0.8rem 1rem;
+  border: none;
+  background: #101e31;
+  will-change: background-color;
+  -webkit-transition: background-color ease-in-out 0.3s;
+  -moz-transition: background-color ease-in-out 0.3s;
+  -ms-transition: background-color ease-in-out 0.3s;
+  -o-transition: background-color ease-in-out 0.3s;
+  transition: background-color ease-in-out 0.3s;
+}
+
+/* line 223, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+form.style-dark .input_text input.correct-input, form.style-dark .input_tel input.correct-input, form.style-dark .input_textarea input.correct-input {
+  background-color: #2a4c7d;
+}
+
+/* line 232, C:/Users/Adam/Documents/Repos/Plugins/VaSe/src/scss/style.scss */
+form.style-dark .button {
+  /*
+				will-change: width;
+				@include transition(width ease-in-out 0.3s);
+
+				&:hover, &:focus, &:active {
+					width: 100%;
+				}
+				*/
+}
+
+/*# sourceMappingURL=../css/style.map */

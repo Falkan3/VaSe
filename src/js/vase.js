@@ -56,6 +56,7 @@
             //form info
             novalidate: true,
             input: {
+                input_container_class: '.input',
                 fields: [
                     /*
                     {
@@ -160,10 +161,14 @@
 
 
             //form fields
-            this.initForm_generate_fields();
+            if(!this.settings.input.fields.length) {
+                this.initForm_generate_fields();
+            }
 
             //agreements
-            //this.initPopup_generate_popup_agreements($popupBody);
+            if(!this.settings.input.agreements.length) {
+                this.initForm_generate_agreements();
+            }
 
             //apply event listeners to elements contained in popup
             this.popupAppendEventListeners();
@@ -176,17 +181,20 @@
          * Builders for popup body
          */
         initForm_generate_fields: function () {
+            var objThis = this;
+
             //form fields
             var fields;
             var field_attributes = [];
 
             fields = this.form.obj.find('[data-vase-type="field"]');
 
-            console.log(fields)
+            console.log(fields);
 
             fields.each(function() {
                 var $this = $(this);
 
+                var input_container = $this.closest(objThis.settings.input.input_container_class);
                 var input_type = $this.attr('type');
                 var data_field_type = $this.data('vase-field-type');
                 if(!data_field_type) {
@@ -202,18 +210,79 @@
                             break;
                     }
                 }
+                var wrong_input_text = $this.data('vase-wrong-text');
+                if(!wrong_input_text) {
+                    wrong_input_text = objThis.settings.text_vars.wrong_input_text;
+                }
 
-                field_attributes.push({
+                var new_field = {
                     obj: $this,
-                    label: $this.siblings('label'),
+                    container: input_container,
+                    label: input_container.find('label'),
                     type: input_type,
                     data_field_type: data_field_type,
                     max_length: $this.attr('max-length'),
-                    required: $this.prop('required')
-                });
+                    required: $this.prop('required'),
+
+                    wrong_input_text: wrong_input_text,
+                };
+
+                field_attributes.push(new_field);
             });
 
             this.settings.input.fields = field_attributes;
+        },
+
+        initForm_generate_agreements: function () {
+            var objThis = this;
+
+            //form fields
+            var fields;
+            var field_attributes = [];
+
+            fields = this.form.obj.find('[data-vase-type="agreement"]');
+
+            console.log(fields);
+
+            fields.each(function() {
+                var $this = $(this);
+
+                var input_container = $this.closest(objThis.settings.input.input_container_class);
+                var input_type = $this.attr('type');
+                var data_field_type = $this.data('vase-field-type');
+                if(!data_field_type) {
+                    switch(input_type) {
+                        case 'checkbox':
+                            data_field_type = 'checkbox';
+                            break;
+                        case 'radio':
+                            data_field_type = 'radio';
+                            break;
+                        default:
+                            data_field_type = '';
+                            break;
+                    }
+                }
+                var wrong_input_text = $this.data('vase-wrong-text');
+                if(!wrong_input_text) {
+                    wrong_input_text = objThis.settings.text_vars.wrong_input_text;
+                }
+
+                var new_field = {
+                    obj: $this,
+                    container: input_container,
+                    label: input_container.find('label'),
+                    type: input_type,
+                    data_field_type: data_field_type,
+                    required: $this.prop('required'),
+
+                    wrong_input_text: wrong_input_text,
+                };
+
+                field_attributes.push(new_field);
+            });
+
+            this.settings.input.agreements = field_attributes;
         },
 
         /*
@@ -340,7 +409,7 @@
             //todo: select validate field
             else if(field.type === 'select') {
                 if(field.required === true) {
-                    if (!$this.prop('checked')) {
+                    if (!$this.val()) {
                         is_valid = false;
                     }
                 }
@@ -377,6 +446,8 @@
             };
             var settings = $.extend({}, defaults, options);
 
+            var objThis = this;
+
             var fields = _fields;
 
             //return value. If all inputs are correctly validated, the value will remain true. If one fails, it switches to false
@@ -392,7 +463,7 @@
                 var field_valid = this.ValidateField(field);
 
                 var $this = field.obj;
-                var $this_container = $this.closest('.input');
+                var $this_container = field.container;//$this.closest(objThis.settings.input.input_container_class);
 
                 //find and remove old status
                 var old_obj = $this_container.find('.' + form_obj_prefix + 'status');
@@ -428,7 +499,7 @@
                         //add element signifying wrong input
                         if (settings.append_status) {
                             var $wrong_input_obj = $('<span class="' + form_obj_prefix + 'status"></span>');
-                            $wrong_input_obj.text(this.settings.text_vars.wrong_input_text);
+                            $wrong_input_obj.text(field.wrong_input_text); //this.settings.text_vars.wrong_input_text
                             $wrong_input_obj.hide();
 
                             $wrong_input_obj.appendTo($this_container);

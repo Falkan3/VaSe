@@ -376,7 +376,7 @@
                     var $this = $(this);
                     var index = $this.data(form_obj_prefix + 'index');
                     //validate input
-                    var validated = objThis.ValidateForm([objThis.settings.input.fields[index]], {append_status: false, focus_first_wrong: false});
+                    var validated = objThis.ValidateForm([objThis.settings.input.fields[index]], {append_status: false, focus_first_wrong: false, clear_status_if_empty: true});
                     //send form if validated
                     if (validated) {
                         console.log('input validation successful');
@@ -400,7 +400,7 @@
                 agreement.obj.on('change', function (e) {
                     var index = $(this).data(form_obj_prefix + 'index');
                     //validate input
-                    var validated = objThis.ValidateForm([objThis.settings.input.agreements[index]], {append_status: false, focus_first_wrong: false});
+                    var validated = objThis.ValidateForm([objThis.settings.input.agreements[index]], {append_status: false, focus_first_wrong: false, clear_status_if_empty: true});
                     //send form if validated
                     if (validated) {
                         console.log('agreement validation successful');
@@ -478,6 +478,9 @@
             //return value. If all inputs are correctly validated, the value will remain true. If one fails, it switches to false
             var is_valid = true;
 
+            //check if the input value is empty
+            var is_empty = null;
+
             /* --- Validation --- */
 
             var $this_val;
@@ -485,11 +488,15 @@
             //special validation for select and checbkox
             //checkbox
             if(field.type === 'checkbox') {
+                $this_val = $this.prop('checked');
+
                 if(field.required === true) {
-                    if (!$this.prop('checked')) {
+                    if (!$this_val) {
                         is_valid = false;
                     }
                 }
+                //is_empty signifies if the input value is of 0 length
+                is_empty = !$this_val;
             }
 
             //select
@@ -502,6 +509,8 @@
                         is_valid = false;
                     }
                 }
+                //is_empty signifies if the input value is of 0 length
+                is_empty = !$this_val;
             }
             //rest (textfields)
             else {
@@ -522,9 +531,11 @@
 
                     is_valid = is_valid && $this_val;
                 }
+                //is_empty signifies if the input value is of 0 length
+                is_empty = !$this_val;
             }
 
-            return {is_valid: is_valid, field: field};
+            return {is_valid: is_valid, is_empty: is_empty, field: field};
         },
 
         /**
@@ -535,7 +546,8 @@
                 append_status: true,
                 focus_first_wrong: true,
                 fade_duration: 300,
-                clear_status_only: false
+                clear_status_only: false,
+                clear_status_if_empty: false,
             };
             var settings = $.extend({}, defaults, options);
 
@@ -570,7 +582,8 @@
                     });
                 }
 
-                if(settings.clear_status_only) {
+                //remove all status messaged underneath inputs if clear_status_only parameter is set or the parameter clear_status_if_empty and the input value is empty
+                if(settings.clear_status_only || (settings.clear_status_if_empty && field_valid.is_empty === true)) {
                     $this.removeClass(objThis.settings.input.correct_input_class);
                     $this_container.removeClass(objThis.settings.input.correct_input_class);
                     $this.removeClass(objThis.settings.input.wrong_input_class);

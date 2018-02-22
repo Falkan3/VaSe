@@ -83,7 +83,7 @@
                     */
                 ],
                 regex_table: {
-                    'alpha': /^$/,
+                    'alpha': /^.*$/,
                     'phone': /(\(?(\+|00)?48\)?([ -]?))?(\d{3}[ -]?\d{3}[ -]?\d{3})|([ -]?\d{2}[ -]?\d{3}[ -]?\d{2}[ -]?\d{2})/,
                     'email': /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                     //^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčśšśžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŚŠŚŽ∂ð ,.'-]+$
@@ -480,6 +480,8 @@
 
             /* --- Validation --- */
 
+            var $this_val;
+
             //special validation for select and checbkox
             //checkbox
             if(field.type === 'checkbox') {
@@ -493,26 +495,32 @@
             //select
             //todo: select validate field
             else if(field.type === 'select') {
+                $this_val = $this.val();
+
                 if(field.required === true) {
-                    if (!$this.val()) {
+                    if (!$this_val) {
                         is_valid = false;
                     }
                 }
             }
             //rest (textfields)
             else {
-                if(field.required === true || $this.val() !== '') {
+                $this_val = $this.val();
+
+                if(field.required === true || $this_val) {
                     //define regex for field types
                     var regex_table = this.settings.input.regex_table;
 
                     if (field.field_data_type && field.field_data_type in regex_table) {
                         var regex = regex_table[field.field_data_type];
-                        if (!regex.test($this.val())) {
+                        if (!regex.test($this_val)) {
                             is_valid = false;
                         }
                     } else {
                         is_valid = false;
                     }
+
+                    is_valid = is_valid && $this_val;
                 }
             }
 

@@ -26,14 +26,14 @@
 
 <div class="wrapper">
     <div class="container">
-        <form method="post" class="style-dark" data-vase='{"element_type": "form"}'>
+        <form method="post" class="style-dark" data-vase-element-type="form">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="input input_text">
                             <label for="fld_name">Name<span class="asterisk">*</span></label>
                             <div class="cut-off-corner">
-                                <input id="fld_name" type="text" name="fld_name" required="required" data-vase='{"element_type": "field", "field_data_type": "name", "wrong_input_text": "Incorrect name format"}' />
+                                <input id="fld_name" type="text" name="fld_name" required="required" data-vase='{"element_type": "field", "field_data_type": "alpha", "wrong_input_text": "Incorrect name format"}' />
                             </div>
                         </div>
                     </div>
@@ -102,7 +102,7 @@
 <script>
     var x;
     $(function () {
-        x = $('[data-vase-type="form"]').VaSe({
+        x = $('[data-vase-element-type="form"]').VaSe({
             input: {
                 correct_input_class: 'correct-input',
                 wrong_input_class: 'wrong-input',

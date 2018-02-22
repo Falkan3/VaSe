@@ -22,6 +22,7 @@
 
     // Create the defaults once
     var pluginName = "VaSe",
+        pluginNameLower = pluginName.toLowerCase(),
         form_obj_prefix = 'vase--',
         input_all_mask = 'input, select, textarea',
 
@@ -63,7 +64,7 @@
                         obj: null,
                         label: null,
                         type: 'tel',
-                        data_field_type: 'phone', //possible types: phone, name, email. Used for regex_table
+                        field_data_type: 'phone', //possible types: phone, name, email. Used for regex_table
                         max_length: 20,
                         required: true
                     },
@@ -150,7 +151,7 @@
             var objThis = this;
 
             this.form.obj = $(this.element);
-            this.form.status =  this.form.obj.find('[data-vase-type="status"]');
+            this.form.status = null;
 
             //add novalidate attribute if applicable
             if(this.settings.novalidate) {
@@ -159,149 +160,230 @@
 
             //find references to sections
 
+            //form content
+            this.initForm_generate_content();
 
-            //form fields
-            if(!this.settings.input.fields.length) {
-                this.initForm_generate_fields();
-            }
-
-            //agreements
-            if(!this.settings.input.agreements.length) {
-                this.initForm_generate_agreements();
-            }
-
-            //apply event listeners to elements contained in popup
-            this.popupAppendEventListeners();
+            //apply event listeners to elements contained in form
+            this.formAppendEventListeners();
 
             //apply miscellaneous plugins
             this.formApplyMisc();
         },
 
         /*
-         * Builders for popup body
+         * Builders for form body
          */
+        initForm_generate_content: function () {
+            var all_fields = this.form.obj.find('[data-' + pluginNameLower + ']');
+
+            //input fields of the form
+            var fields = [];
+            //input fields of the form that act as an agreement to terms
+            var agreements = [];
+            //form status section
+            var status = $([]);
+
+            all_fields.each(function () {
+                var $this = $(this);
+                var data = $this.data(pluginNameLower);
+                if (data) {
+                    //data = JSON.parse(data);
+
+                    data.obj = $this;
+
+                    if (data.field_type === 'field') {
+                        fields.push(data);
+                    }
+                    else if (data.field_type === 'agreement') {
+                        agreements.push(data);
+                    }
+                    else if (data.field_type === 'status') {
+                        status = status.add($this);
+                    }
+                }
+            });
+
+            if(!this.settings.input.fields.length) {
+                this.settings.input.fields = fields;
+            }
+            if(!this.settings.input.agreements.length) {
+                this.settings.input.agreements = agreements;
+            }
+            if(!this.form.status) {
+                this.form.status = status;
+            }
+
+            //form fields
+            this.initForm_generate_fields();
+
+            //form agreements
+            this.initForm_generate_agreements();
+        },
+
         initForm_generate_fields: function () {
             var objThis = this;
 
-            //form fields
-            var fields;
-            var field_attributes = [];
+            var fields_length = this.settings.input.fields.length;
 
-            fields = this.form.obj.find('[data-vase-type="field"]');
+            for(var i = 0; i < fields_length; i++) {
+                var $this = this.settings.input.fields[i].obj;
 
-            console.log(fields);
+                var new_field = objThis.initForm_generate_single_field($this, this.settings.input.fields[i]);
 
-            fields.each(function() {
-                var $this = $(this);
+                this.settings.input.fields[i] = new_field;
+            }
+        },
+
+        initForm_generate_single_field: function (_ele, _options) {
+            var defaults = {
+
+            };
+            var settings = $.extend({}, defaults, _options);
+
+            var objThis = this;
+            var $this = _ele; //$(this);
+
+            //get data variables from html
+            var field_data = $this.data(pluginNameLower);
+            if(field_data) {
+                //field_data = field_data.toJSON();
 
                 var input_container = $this.closest(objThis.settings.input.input_container_class);
                 var input_type = $this.attr('type');
-                var data_field_type = $this.data('vase-field-type');
-                if(!data_field_type) {
-                    switch(input_type) {
-                        case 'tel':
-                            data_field_type = 'phone';
-                            break;
-                        case 'email':
-                            data_field_type = 'email';
-                            break;
-                        default:
-                            data_field_type = 'alpha';
-                            break;
-                    }
-                }
-                var wrong_input_text = $this.data('vase-wrong-text');
+                var field_data_type = field_data.field_data_type; //$this.data('vase-field-type');
+
+                var wrong_input_text = field_data.wrong_input_text; //$this.data('vase-wrong-text');
                 if(!wrong_input_text) {
                     wrong_input_text = objThis.settings.text_vars.wrong_input_text;
                 }
+            }
 
-                var new_field = {
-                    obj: $this,
-                    container: input_container,
-                    label: input_container.find('label'),
-                    type: input_type,
-                    data_field_type: data_field_type,
-                    max_length: $this.attr('max-length'),
-                    required: $this.prop('required'),
+            if(!field_data_type) {
+                switch(input_type) {
+                    case 'tel':
+                        field_data_type = 'phone';
+                        break;
+                    case 'email':
+                        field_data_type = 'email';
+                        break;
+                    default:
+                        field_data_type = 'alpha';
+                        break;
+                }
+            }
 
-                    wrong_input_text: wrong_input_text,
-                };
+            var new_field = {
+                obj: $this,
+                container: input_container,
+                label: input_container.find('label'),
+                type: input_type,
+                field_data_type: field_data_type,
+                max_length: $this.attr('max-length'),
+                required: $this.prop('required'),
 
-                field_attributes.push(new_field);
-            });
+                wrong_input_text: wrong_input_text,
+            };
+            if(settings) {
+                new_field = $.extend({}, new_field, settings);
+            }
 
-            this.settings.input.fields = field_attributes;
+            return new_field;
         },
 
         initForm_generate_agreements: function () {
             var objThis = this;
 
-            //form fields
-            var fields;
-            var field_attributes = [];
+            var fields_length = this.settings.input.agreements.length;
 
-            fields = this.form.obj.find('[data-vase-type="agreement"]');
+            for(var i = 0; i < fields_length; i++) {
+                var $this = this.settings.input.agreements[i].obj;
 
-            console.log(fields);
+                var new_field = objThis.initForm_generate_single_agreement_field($this, this.settings.input.agreements[i]);
 
-            fields.each(function() {
-                var $this = $(this);
+                this.settings.input.agreements[i] = new_field;
+            }
+        },
+
+        initForm_generate_single_agreement_field: function (_ele, _options) {
+            var defaults = {
+
+            };
+            var settings = $.extend({}, defaults, _options);
+
+            var objThis = this;
+            var $this = _ele; //$(this);
+
+            //get data variables from html
+            var field_data = $this.data(pluginNameLower);
+            if(field_data) {
+                //field_data = field_data.toJSON();
 
                 var input_container = $this.closest(objThis.settings.input.input_container_class);
                 var input_type = $this.attr('type');
-                var data_field_type = $this.data('vase-field-type');
-                if(!data_field_type) {
-                    switch(input_type) {
-                        case 'checkbox':
-                            data_field_type = 'checkbox';
-                            break;
-                        case 'radio':
-                            data_field_type = 'radio';
-                            break;
-                        default:
-                            data_field_type = '';
-                            break;
-                    }
-                }
-                var wrong_input_text = $this.data('vase-wrong-text');
+                var field_data_type = field_data.field_data_type; //$this.data('vase-field-type');
+
+                var wrong_input_text = field_data.wrong_input_text; //$this.data('vase-wrong-text');
                 if(!wrong_input_text) {
                     wrong_input_text = objThis.settings.text_vars.wrong_input_text;
                 }
+            }
 
-                var new_field = {
-                    obj: $this,
-                    container: input_container,
-                    label: input_container.find('label'),
-                    type: input_type,
-                    data_field_type: data_field_type,
-                    required: $this.prop('required'),
+            if(!field_data_type) {
+                switch(input_type) {
+                    case 'checkbox':
+                        field_data_type = 'checkbox';
+                        break;
+                    case 'radio':
+                        field_data_type = 'radio';
+                        break;
+                    default:
+                        field_data_type = '';
+                        break;
+                }
+            }
 
-                    wrong_input_text: wrong_input_text,
-                };
+            var new_field = {
+                obj: $this,
+                container: input_container,
+                label: input_container.find('label'),
+                type: input_type,
+                field_data_type: field_data_type,
+                required: $this.prop('required'),
 
-                field_attributes.push(new_field);
-            });
+                wrong_input_text: wrong_input_text,
+            };
+            if(settings) {
+                new_field = $.extend({}, new_field, settings);
+            }
 
-            this.settings.input.agreements = field_attributes;
+            return new_field;
         },
 
         /*
          * Append event listeners for clickable elements in popup window
          */
-        popupAppendEventListeners: function () {
+        formAppendEventListeners: function () {
             var objThis = this;
 
             //form input blur / input
             for(var i = 0; i < objThis.settings.input.fields.length; i++) {
                 var field = objThis.settings.input.fields[i];
-                field.obj.data('index', i);
+                field.obj.data(form_obj_prefix + 'index', i);
                 field.obj.on('input', function (e) {
-                    var index = $(this).data('index');
+                    var $this = $(this);
+                    var index = $this.data(form_obj_prefix + 'index');
                     //validate input
                     var validated = objThis.ValidateForm([objThis.settings.input.fields[index]], {append_status: false, focus_first_wrong: false});
                     //send form if validated
                     if (validated) {
                         console.log('input validation successful');
+                    }
+
+                    //add class has-content if the input isn't empty
+                    if($this.val()) {
+                        $this.addClass(form_obj_prefix + 'has-content');
+                    } else {
+                        $this.removeClass(form_obj_prefix + 'has-content');
                     }
 
                     return false;
@@ -311,9 +393,9 @@
             //form agreement blur / input
             for(var i = 0; i < objThis.settings.input.agreements.length; i++) {
                 var agreement = objThis.settings.input.agreements[i];
-                agreement.obj.data('index', i);
+                agreement.obj.data(form_obj_prefix + 'index', i);
                 agreement.obj.on('change', function (e) {
-                    var index = $(this).data('index');
+                    var index = $(this).data(form_obj_prefix + 'index');
                     //validate input
                     var validated = objThis.ValidateForm([objThis.settings.input.agreements[index]], {append_status: false, focus_first_wrong: false});
                     //send form if validated
@@ -420,8 +502,8 @@
                     //define regex for field types
                     var regex_table = this.settings.input.regex_table;
 
-                    if (field.data_field_type && field.data_field_type in regex_table) {
-                        var regex = regex_table[field.data_field_type];
+                    if (field.field_data_type && field.field_data_type in regex_table) {
+                        var regex = regex_table[field.field_data_type];
                         if (!regex.test($this.val())) {
                             is_valid = false;
                         }

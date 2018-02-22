@@ -194,13 +194,13 @@
 
                     data.obj = $this;
 
-                    if (data.field_type === 'field') {
+                    if (data.element_type === 'field') {
                         fields.push(data);
                     }
-                    else if (data.field_type === 'agreement') {
+                    else if (data.element_type === 'agreement') {
                         agreements.push(data);
                     }
-                    else if (data.field_type === 'status') {
+                    else if (data.element_type === 'status') {
                         status = status.add($this);
                     }
                 }

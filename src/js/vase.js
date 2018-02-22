@@ -33,8 +33,8 @@
                     {name: 'api_key', value: ''},
                 ],
                 param: {
-                    success: {name: 'result', value: 'success'},
-                    message: '',
+                    success: {name: 'result', value: 'success'}, //parameter named result will contain information about the call's success
+                    message: '', //the key of returned data (preferably an array) from the API which contains the response
                 },
             },
             //data
@@ -58,6 +58,8 @@
             novalidate: true,
             input: {
                 input_container_class: '.input',
+                correct_input_class: form_obj_prefix + 'correct-input',
+                wrong_input_class: form_obj_prefix + 'wrong-input',
                 fields: [
                     /*
                     {
@@ -84,7 +86,8 @@
                     'alpha': /^$/,
                     'phone': /(\(?(\+|00)?48\)?([ -]?))?(\d{3}[ -]?\d{3}[ -]?\d{3})|([ -]?\d{2}[ -]?\d{3}[ -]?\d{2}[ -]?\d{2})/,
                     'email': /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                    'name': /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšśžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŚŽ∂ð ,.'-]+$/
+                    //^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčśšśžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŚŠŚŽ∂ð ,.'-]+$
+                    'name': /^[a-zA-Z\u00E0\u00E1\u00E2\u00E4\u00E3\u00E5\u0105\u010D\u0107\u0119\u00E8\u00E9\u00EA\u00EB\u0117\u012F\u00EC\u00ED\u00EE\u00EF\u0142\u0144\u00F2\u00F3\u00F4\u00F6\u00F5\u00F8\u00F9\u00FA\u00FB\u00FC\u0173\u016B\u00FF\u00FD\u017C\u017A\u00F1\u00E7\u010D\u015B\u0161\u015B\u017E\u00C0\u00C1\u00C2\u00C4\u00C3\u00C5\u0104\u0106\u010C\u0116\u0118\u00C8\u00C9\u00CA\u00CB\u00CC\u00CD\u00CE\u00CF\u012E\u0141\u0143\u00D2\u00D3\u00D4\u00D6\u00D5\u00D8\u00D9\u00DA\u00DB\u00DC\u0172\u016A\u0178\u00DD\u017B\u0179\u00D1\u00DF\u00C7\u0152\u00C6\u010C\u015A\u0160\u015A\u017D\u2202\u00F0 ,.'-]+$/,
                 },
                 //dictionary is used to exchange input names into values from the dictionary on API request
                 data_dictionary: {} //'sc_fld_telephone': 'phone'
@@ -560,21 +563,21 @@
                 }
 
                 if(settings.clear_status_only) {
-                    $this.removeClass('correct-input');
-                    $this_container.removeClass('correct-input');
-                    $this.removeClass('wrong-input');
-                    $this_container.removeClass('wrong-input');
+                    $this.removeClass(objThis.settings.input.correct_input_class);
+                    $this_container.removeClass(objThis.settings.input.correct_input_class);
+                    $this.removeClass(objThis.settings.input.wrong_input_class);
+                    $this_container.removeClass(objThis.settings.input.wrong_input_class);
                 } else {
                     if(field_valid.is_valid) {
-                        $this.removeClass('wrong-input');
-                        $this_container.removeClass('wrong-input');
-                        $this.addClass('correct-input');
-                        $this_container.addClass('correct-input');
+                        $this.removeClass(objThis.settings.input.wrong_input_class);
+                        $this_container.removeClass(objThis.settings.input.wrong_input_class);
+                        $this.addClass(objThis.settings.input.correct_input_class);
+                        $this_container.addClass(objThis.settings.input.correct_input_class);
                     } else {
-                        $this.removeClass('correct-input');
-                        $this_container.removeClass('correct-input');
-                        $this.addClass('wrong-input');
-                        $this_container.addClass('wrong-input');
+                        $this.removeClass(objThis.settings.input.correct_input_class);
+                        $this_container.removeClass(objThis.settings.input.correct_input_class);
+                        $this.addClass(objThis.settings.input.wrong_input_class);
+                        $this_container.addClass(objThis.settings.input.wrong_input_class);
 
                         wrong_inputs.push({field: field, message: ''});
 

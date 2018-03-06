@@ -55,7 +55,11 @@
                 status_error: "Server encountered an error",
             },
             //form info
-            novalidate: true,
+            form: {
+                novalidate: true,
+                form: null,
+                status: null,
+            },
             input: {
                 input_container_class: '.input',
                 correct_input_class: form_obj_prefix + 'correct-input',
@@ -65,6 +69,7 @@
                     {
                         obj: null,
                         label: null,
+                        status: null,
                         type: 'tel',
                         field_data_type: 'phone', //possible types: phone, name, email. Used for regex_table
                         max_length: 20,
@@ -76,6 +81,8 @@
                     /*
                     {
                         obj: null,
+                        label: null,
+                        status: null,
                         type: 'checkbox',
                         required: true,
                         checked: true,
@@ -126,7 +133,7 @@
         //form
         this.form = {
             obj: null,
-            footer: null,
+            status: null,
         };
 
         this.init();
@@ -154,10 +161,10 @@
             var objThis = this;
 
             this.form.obj = $(this.element);
-            this.form.status = null;
+            this.form.status = this.settings.form.status;
 
             //add novalidate attribute if applicable
-            if(this.settings.novalidate) {
+            if(this.settings.form.novalidate) {
                 this.form.obj.attr('novalidate', 'novalidate');
             }
 
@@ -383,14 +390,12 @@
                     }
 
                     //add class has-content if the input isn't empty
-                    if($this.val()) {
-                        $this.addClass(form_obj_prefix + 'has-content');
-                    } else {
-                        $this.removeClass(form_obj_prefix + 'has-content');
-                    }
+                    objThis.formCheckIfInputHasContent($this);
 
                     return false;
                 });
+
+                objThis.formCheckIfInputHasContent(field.obj);
             }
 
             //form agreement blur / input
@@ -432,6 +437,13 @@
 
                 return false;
             });
+        },
+        formCheckIfInputHasContent: function(_input) {
+            if(_input.val()) {
+                _input.addClass(form_obj_prefix + 'has-content');
+            } else {
+                _input.removeClass(form_obj_prefix + 'has-content');
+            }
         },
 
         /*
@@ -608,7 +620,7 @@
                             $wrong_input_obj.text(field.wrong_input_text); //this.settings.text_vars.wrong_input_text
                             $wrong_input_obj.hide();
 
-                            $wrong_input_obj.appendTo($this_container);
+                            field.status = $wrong_input_obj.appendTo($this_container);
 
                             $wrong_input_obj.fadeIn(settings.fade_duration);
                         }

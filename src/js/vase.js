@@ -175,6 +175,11 @@
                 this.settings.api.url = this.form.obj.attr('url');
             }
 
+            //set form method if not specified in settings
+            if(!this.settings.data.form_method) {
+                this.settings.data.form_method = this.form.obj.attr('method');
+            }
+
             //find references to sections
 
             //form content

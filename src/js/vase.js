@@ -172,7 +172,7 @@
 
             //set form url if not specified in settings
             if(!this.settings.api.url) {
-                this.settings.api.url = this.form.obj.attr('url');
+                this.settings.api.url = this.form.obj.attr('action');
             }
 
             //set form method if not specified in settings

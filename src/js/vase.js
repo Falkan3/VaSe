@@ -28,7 +28,7 @@
 
         defaults = {
             api: {
-                url: 'test',
+                url: '',
                 custom: [
                     {name: 'api_key', value: ''},
                 ],
@@ -50,8 +50,8 @@
             //content - text
             text_vars: {
                 wrong_input_text: "Wrong input",
-                status_success: "Form sent successfuly",
                 status_sending: "Sending form...",
+                status_success: "Form sent successfuly",
                 status_error: "Server encountered an error",
             },
             //form info
@@ -71,8 +71,10 @@
                         label: null,
                         status: null,
                         type: 'tel',
+                        element_type: 'field',
                         field_data_type: 'phone', //possible types: phone, name, email. Used for regex_table
                         max_length: 20,
+                        wrong_input_text: 'Incorrect phone format',
                         required: true
                     },
                     */
@@ -166,6 +168,11 @@
             //add novalidate attribute if applicable
             if(this.settings.form.novalidate) {
                 this.form.obj.attr('novalidate', 'novalidate');
+            }
+
+            //set form url if not specified in settings
+            if(!this.settings.api.url) {
+                this.settings.api.url = this.form.obj.attr('url');
             }
 
             //find references to sections
@@ -730,7 +737,7 @@
                 api_custom: [],
                 data: '',
                 data_dictionary: {},
-                success_param: {name: 'result', value: 'success'}, //name of parameter in returned data from API that contains the success reponse
+                success_param: {name: 'result', value: 'success'}, //name of parameter in returned data from API that contains the success response
                 return_param: 'message', //the key of returned data (preferably an array) from the API which contains the response message
                 send_headers: true,
                 /*

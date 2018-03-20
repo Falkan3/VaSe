@@ -101,6 +101,14 @@
 
 <script>
     var x;
+
+    function test (input) {
+        console.log(input);
+        x.SendDataReturn({
+            reset_input: false, message: input.statusText, style: 'error'
+        });
+    }
+
     $(function () {
         x = $('[data-vase-element-type="form"]').VaSe({
             input: {
@@ -114,7 +122,15 @@
                     }
                 ]
                 */
-            }
+            },
+            // callbacks: {
+            //     onSend: {
+            //         error: {
+            //             function: test,
+            //             this: this,
+            //         }
+            //     }
+            // }
         });
     });
 </script>

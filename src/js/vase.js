@@ -103,16 +103,16 @@
             },
             callbacks: {
                 onSend: {
-                    success: {
-                        function: null,
-                        this: this,
-                        parameters: null,
-                    },
-                    error: {
-                        function: null,
-                        this: this,
-                        parameters: null,
-                    }
+                    // success: {
+                    //     function: null,
+                    //     this: this,
+                    //     parameters: null,
+                    // },
+                    // error: {
+                    //     function: null,
+                    //     this: this,
+                    //     parameters: null,
+                    // }
                 }
             }
         };
@@ -162,6 +162,26 @@
         initForm: function () {
             let objThis = this;
 
+            this.initForm_generate_defaults();
+
+            //find references to sections
+
+            //form content
+            this.initForm_generate_content();
+
+            //apply event listeners to elements contained in form
+            this.formAppendEventListeners();
+
+            //apply miscellaneous plugins
+            this.formApplyMisc();
+        },
+
+        /*
+         * Set default values of settings if not specified
+         */
+        initForm_generate_defaults: function () {
+            let objThis = this;
+
             this.form.jq_obj = $(this.element);
             this.form.status = this.settings.form.status;
 
@@ -180,16 +200,21 @@
                 this.settings.data.form_method = this.form.jq_obj.attr('method');
             }
 
-            //find references to sections
-
-            //form content
-            this.initForm_generate_content();
-
-            //apply event listeners to elements contained in form
-            this.formAppendEventListeners();
-
-            //apply miscellaneous plugins
-            this.formApplyMisc();
+            //set callback success and error functions if not set
+            // if(!this.settings.callbacks.onSend.success) {
+            //     this.settings.callbacks.onSend.success = {
+            //         function: this.SendDataReturn,
+            //         this: this,
+            //         parameters: [{reset_input: true, message: objThis.settings.text_vars.status_success, style: 'success'}]
+            //     }
+            // }
+            // if(!this.settings.callbacks.onSend.error) {
+            //     this.settings.callbacks.onSend.error = {
+            //         function: this.SendDataReturn,
+            //         this: this,
+            //         parameters: [{reset_input: false, message: objThis.settings.text_vars.status_error, style: 'error'}]
+            //     }
+            // }
         },
 
         /*
@@ -431,6 +456,8 @@
             this.form.jq_obj.on('submit', function (e) {
                 let status = objThis.SendData({
                     callback: {
+                        // success: objThis.settings.callbacks.onSend.success,
+                        // error: objThis.settings.callbacks.onSend.error,
                         success: {
                             function: objThis.SendDataReturn,
                             this: objThis,
@@ -863,24 +890,24 @@
                             //CALLBACK
                             //SUCCESS
                             //check if callback is set and is a function
-                            if (settings.callback.success.function && $.isFunction(settings.callback.success.function)) {
+                            if (settings.callback.success && settings.callback.success.function && $.isFunction(settings.callback.success.function)) {
                                 //call the callback function after the function is done
                                 settings.callback.success.function.apply(settings.callback.success.this, settings.callback.success.parameters);
                             }
                             //callback from obj settings
-                            if (objThis.settings.callbacks.onSend.success.function && $.isFunction(objThis.settings.callbacks.onSend.success.function)) {
+                            if (objThis.settings.callbacks.onSend.success && objThis.settings.callbacks.onSend.success.function && $.isFunction(objThis.settings.callbacks.onSend.success.function)) {
                                 objThis.settings.callbacks.onSend.success.function.apply(objThis.settings.callbacks.onSend.success.this, [$.extend(true, {}, data, objThis.settings.callbacks.onSend.success.parameters)]);
                             }
                         } else {
                             //CALLBACK
                             //ERROR
                             //check if callback is set and is a function
-                            if (settings.callback.error.function && $.isFunction(settings.callback.error.function)) {
+                            if (settings.callback.error && settings.callback.error.function && $.isFunction(settings.callback.error.function)) {
                                 //call the callback function after the function is done
                                 settings.callback.error.function.apply(settings.callback.error.this, settings.callback.error.parameters);
                             }
                             //callback from obj settings
-                            if (objThis.settings.callbacks.onSend.error.function && $.isFunction(objThis.settings.callbacks.onSend.error.function)) {
+                            if (objThis.settings.callbacks.onSend.error && objThis.settings.callbacks.onSend.error.function && $.isFunction(objThis.settings.callbacks.onSend.error.function)) {
                                 objThis.settings.callbacks.onSend.error.function.apply(objThis.settings.callbacks.onSend.error.this, [$.extend(true, {}, data, objThis.settings.callbacks.onSend.error.parameters)]);
                             }
 
@@ -906,12 +933,12 @@
 
                         //ERROR
                         //check if callback is set and is a function
-                        if (settings.callback.error.function && $.isFunction(settings.callback.error.function)) {
+                        if (settings.callback.error && settings.callback.error.function && $.isFunction(settings.callback.error.function)) {
                             //call the callback function after the function is done
                             settings.callback.error.function.apply(settings.callback.error.this, settings.callback.error.parameters);
                         }
-                        if (objThis.settings.callbacks.onSend.error.function && $.isFunction(objThis.settings.callbacks.onSend.error.function)) {
-                            objThis.settings.callbacks.onSend.error.function.apply(objThis.settings.callbacks.onSend.error.this, objThis.settings.callbacks.onSend.error.parameters);
+                        if (objThis.settings.callbacks.onSend.error && objThis.settings.callbacks.onSend.error.function && $.isFunction(objThis.settings.callbacks.onSend.error.function)) {
+                            objThis.settings.callbacks.onSend.error.function.apply(objThis.settings.callbacks.onSend.error.this, [$.extend(true, {}, data, objThis.settings.callbacks.onSend.error.parameters)]);
                         }
                     }
                 });

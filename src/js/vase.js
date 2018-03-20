@@ -46,6 +46,7 @@
             status: {
                 ajax_processing: false,
                 response_from_api_visible: true,
+                default_response_from_api_visible: true
             },
             //content - text
             text_vars: {
@@ -891,10 +892,12 @@
                         if(response_success) {
                             //CALLBACK
                             //SUCCESS
-                            //check if callback is set and is a function
-                            if (settings.callback.success && settings.callback.success.function && $.isFunction(settings.callback.success.function)) {
-                                //call the callback function after the function is done
-                                settings.callback.success.function.apply(settings.callback.success.this, settings.callback.success.parameters);
+                            //check if default callback is set and is a function
+                            if(objThis.settings.status.default_response_from_api_visible) {
+                                if (settings.callback.success && settings.callback.success.function && $.isFunction(settings.callback.success.function)) {
+                                    //call the callback function after the function is done
+                                    settings.callback.success.function.apply(settings.callback.success.this, settings.callback.success.parameters);
+                                }
                             }
                             //callback from obj settings
                             if (objThis.settings.callbacks.onSend.success && objThis.settings.callbacks.onSend.success.function && $.isFunction(objThis.settings.callbacks.onSend.success.function)) {
@@ -903,10 +906,12 @@
                         } else {
                             //CALLBACK
                             //ERROR
-                            //check if callback is set and is a function
-                            if (settings.callback.error && settings.callback.error.function && $.isFunction(settings.callback.error.function)) {
-                                //call the callback function after the function is done
-                                settings.callback.error.function.apply(settings.callback.error.this, settings.callback.error.parameters);
+                            //check if default callback is set and is a function
+                            if(objThis.settings.status.default_response_from_api_visible) {
+                                if (settings.callback.error && settings.callback.error.function && $.isFunction(settings.callback.error.function)) {
+                                    //call the callback function after the function is done
+                                    settings.callback.error.function.apply(settings.callback.error.this, settings.callback.error.parameters);
+                                }
                             }
                             //callback from obj settings
                             if (objThis.settings.callbacks.onSend.error && objThis.settings.callbacks.onSend.error.function && $.isFunction(objThis.settings.callbacks.onSend.error.function)) {
@@ -934,11 +939,14 @@
                         //CALLBACK
 
                         //ERROR
-                        //check if callback is set and is a function
-                        if (settings.callback.error && settings.callback.error.function && $.isFunction(settings.callback.error.function)) {
-                            //call the callback function after the function is done
-                            settings.callback.error.function.apply(settings.callback.error.this, settings.callback.error.parameters);
+                        //check if default callback is set and is a function
+                        if(objThis.settings.status.default_response_from_api_visible) {
+                            if (settings.callback.error && settings.callback.error.function && $.isFunction(settings.callback.error.function)) {
+                                //call the callback function after the function is done
+                                settings.callback.error.function.apply(settings.callback.error.this, settings.callback.error.parameters);
+                            }
                         }
+                        //callback from obj settings
                         if (objThis.settings.callbacks.onSend.error && objThis.settings.callbacks.onSend.error.function && $.isFunction(objThis.settings.callbacks.onSend.error.function)) {
                             objThis.settings.callbacks.onSend.error.function.apply(objThis.settings.callbacks.onSend.error.this, [$.extend(true, {}, data, objThis.settings.callbacks.onSend.error.parameters)]);
                         }

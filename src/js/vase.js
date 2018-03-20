@@ -854,8 +854,10 @@
                         console.log(data);
 
                         if (data[settings.return_param]) {
-                            for (let index in data[settings.return_param]) {
-                                console.log(data[settings.return_param][index]);
+                            if($.isArray(data[settings.return_param])) {
+                                for (let index in data[settings.return_param]) {
+                                    console.log(data[settings.return_param][index]);
+                                }
                             }
 
                             //Show message from API

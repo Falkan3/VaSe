@@ -104,17 +104,8 @@
 
     function test (input) {
         console.log(input);
-
-        let return_message = input.message;
-
-        if($.isArray(input.errors)) {
-            return_message += ': ' + input.errors.join(', ');
-        } else {
-            return_message += ': ' + input;
-        }
-
         x.SendDataReturn({
-            reset_input: false, message: return_message, style: 'error'
+            reset_input: false, message: input.statusText, style: 'error'
         });
     }
 

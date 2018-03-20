@@ -21,7 +21,7 @@
     // minified (especially when both are regularly referenced in your plugin).
 
     // Create the defaults once
-    var pluginName = "VaSe",
+    const pluginName = "VaSe",
         pluginNameLower = pluginName.toLowerCase(),
         form_obj_prefix = 'vase--',
         input_all_mask = 'input, select, textarea',
@@ -160,24 +160,24 @@
          * Main function for initializing popup body
          */
         initForm: function () {
-            var objThis = this;
+            let objThis = this;
 
-            this.form.obj = $(this.element);
+            this.form.jq_obj = $(this.element);
             this.form.status = this.settings.form.status;
 
             //add novalidate attribute if applicable
             if(this.settings.form.novalidate) {
-                this.form.obj.attr('novalidate', 'novalidate');
+                this.form.jq_obj.attr('novalidate', 'novalidate');
             }
 
             //set form url if not specified in settings
             if(!this.settings.api.url) {
-                this.settings.api.url = this.form.obj.attr('action');
+                this.settings.api.url = this.form.jq_obj.attr('action');
             }
 
             //set form method if not specified in settings
             if(!this.settings.data.form_method) {
-                this.settings.data.form_method = this.form.obj.attr('method');
+                this.settings.data.form_method = this.form.jq_obj.attr('method');
             }
 
             //find references to sections
@@ -196,18 +196,18 @@
          * Builders for form body
          */
         initForm_generate_content: function () {
-            var all_fields = this.form.obj.find('[data-' + pluginNameLower + ']');
+            let all_fields = this.form.jq_obj.find('[data-' + pluginNameLower + ']');
 
             //input fields of the form
-            var fields = [];
+            let fields = [];
             //input fields of the form that act as an agreement to terms
-            var agreements = [];
+            let agreements = [];
             //form status section
-            var status = $([]);
+            let status = $([]);
 
             all_fields.each(function () {
-                var $this = $(this);
-                var data = $this.data(pluginNameLower);
+                let $this = $(this);
+                let data = $this.data(pluginNameLower);
                 if (data) {
                     //data = JSON.parse(data);
 
@@ -243,30 +243,30 @@
         },
 
         initForm_generate_fields: function () {
-            var objThis = this;
+            let objThis = this;
 
-            var fields_length = this.settings.input.fields.length;
+            let fields_length = this.settings.input.fields.length;
 
-            for(var i = 0; i < fields_length; i++) {
-                var $this = this.settings.input.fields[i].obj;
+            for(let i = 0; i < fields_length; i++) {
+                let $this = this.settings.input.fields[i].obj;
 
-                var new_field = objThis.initForm_generate_single_field($this, this.settings.input.fields[i]);
+                let new_field = objThis.initForm_generate_single_field($this, this.settings.input.fields[i]);
 
                 this.settings.input.fields[i] = new_field;
             }
         },
 
         initForm_generate_single_field: function (_ele, _options) {
-            var defaults = {
+            let defaults = {
 
             };
-            var settings = $.extend({}, defaults, _options);
+            let settings = $.extend({}, defaults, _options);
 
-            var objThis = this;
-            var $this = _ele; //$(this);
+            let objThis = this;
+            let $this = _ele; //$(this);
 
             //get data variables from html
-            var field_data = $this.data(pluginNameLower);
+            let field_data = $this.data(pluginNameLower);
             if(field_data) {
                 //field_data = field_data.toJSON();
 
@@ -294,7 +294,7 @@
                 }
             }
 
-            var new_field = {
+            let new_field = {
                 obj: $this,
                 container: input_container,
                 label: input_container.find('label'),
@@ -313,30 +313,30 @@
         },
 
         initForm_generate_agreements: function () {
-            var objThis = this;
+            let objThis = this;
 
-            var fields_length = this.settings.input.agreements.length;
+            let fields_length = this.settings.input.agreements.length;
 
-            for(var i = 0; i < fields_length; i++) {
-                var $this = this.settings.input.agreements[i].obj;
+            for(let i = 0; i < fields_length; i++) {
+                let $this = this.settings.input.agreements[i].obj;
 
-                var new_field = objThis.initForm_generate_single_agreement_field($this, this.settings.input.agreements[i]);
+                let new_field = objThis.initForm_generate_single_agreement_field($this, this.settings.input.agreements[i]);
 
                 this.settings.input.agreements[i] = new_field;
             }
         },
 
         initForm_generate_single_agreement_field: function (_ele, _options) {
-            var defaults = {
+            let defaults = {
 
             };
-            var settings = $.extend({}, defaults, _options);
+            let settings = $.extend({}, defaults, _options);
 
-            var objThis = this;
-            var $this = _ele; //$(this);
+            let objThis = this;
+            let $this = _ele; //$(this);
 
             //get data variables from html
-            var field_data = $this.data(pluginNameLower);
+            let field_data = $this.data(pluginNameLower);
             if(field_data) {
                 //field_data = field_data.toJSON();
 
@@ -364,7 +364,7 @@
                 }
             }
 
-            var new_field = {
+            let new_field = {
                 obj: $this,
                 container: input_container,
                 label: input_container.find('label'),
@@ -385,17 +385,17 @@
          * Append event listeners for clickable elements in popup window
          */
         formAppendEventListeners: function () {
-            var objThis = this;
+            let objThis = this;
 
             //form input blur / input
-            for(var i = 0; i < objThis.settings.input.fields.length; i++) {
-                var field = objThis.settings.input.fields[i];
+            for(let i = 0; i < objThis.settings.input.fields.length; i++) {
+                let field = objThis.settings.input.fields[i];
                 field.obj.data(form_obj_prefix + 'index', i);
                 field.obj.on('input', function (e) {
-                    var $this = $(this);
-                    var index = $this.data(form_obj_prefix + 'index');
+                    let $this = $(this);
+                    let index = $this.data(form_obj_prefix + 'index');
                     //validate input
-                    var validated = objThis.ValidateForm([objThis.settings.input.fields[index]], {append_status: false, focus_first_wrong: false, clear_status_if_empty: true});
+                    let validated = objThis.ValidateForm([objThis.settings.input.fields[index]], {append_status: false, focus_first_wrong: false, clear_status_if_empty: true});
                     //send form if validated
                     if (validated) {
                         console.log('input validation successful');
@@ -411,13 +411,13 @@
             }
 
             //form agreement blur / input
-            for(var i = 0; i < objThis.settings.input.agreements.length; i++) {
-                var agreement = objThis.settings.input.agreements[i];
+            for(let i = 0; i < objThis.settings.input.agreements.length; i++) {
+                let agreement = objThis.settings.input.agreements[i];
                 agreement.obj.data(form_obj_prefix + 'index', i);
                 agreement.obj.on('change', function (e) {
-                    var index = $(this).data(form_obj_prefix + 'index');
+                    let index = $(this).data(form_obj_prefix + 'index');
                     //validate input
-                    var validated = objThis.ValidateForm([objThis.settings.input.agreements[index]], {append_status: false, focus_first_wrong: false, clear_status_if_empty: true});
+                    let validated = objThis.ValidateForm([objThis.settings.input.agreements[index]], {append_status: false, focus_first_wrong: false, clear_status_if_empty: true});
                     //send form if validated
                     if (validated) {
                         console.log('agreement validation successful');
@@ -428,8 +428,8 @@
             }
 
             //form submit
-            this.form.obj.on('submit', function (e) {
-                var status = objThis.SendData({
+            this.form.jq_obj.on('submit', function (e) {
+                let status = objThis.SendData({
                     callback: {
                         success: {
                             function: objThis.SendDataReturn,
@@ -463,13 +463,13 @@
          */
         formApplyMisc: function () {
             /* --- js input mask --- */
-            var inputs = this.form.obj.find(input_all_mask);
+            let inputs = this.form.jq_obj.find(input_all_mask);
 
             //check if exists
             console.log('js input mask: ' + (typeof $.fn.inputmask !== 'undefined'));
             if (typeof $.fn.inputmask !== 'undefined') {
-                var input_masked_items = inputs.filter('input[type="tel"], .jsm--phone');
-                var phones_mask = ["###-###-###", "## ###-##-##"];
+                let input_masked_items = inputs.filter('input[type="tel"], .jsm--phone');
+                let phones_mask = ["###-###-###", "## ###-##-##"];
 
                 console.log('js input mask || masked items: ');
                 console.log(input_masked_items);
@@ -491,23 +491,23 @@
          * @return {{is_valid: boolean, field: *}}
          */
         ValidateField: function (_field, options) {
-            var defaults = {
+            let defaults = {
 
             };
-            var settings = $.extend({}, defaults, options);
+            let settings = $.extend({}, defaults, options);
 
-            var field = _field;
-            var $this = field.obj;
+            let field = _field;
+            let $this = field.obj;
 
             //return value. If all inputs are correctly validated, the value will remain true. If one fails, it switches to false
-            var is_valid = true;
+            let is_valid = true;
 
             //check if the input value is empty
-            var is_empty = null;
+            let is_empty = null;
 
             /* --- Validation --- */
 
-            var $this_val;
+            let $this_val;
 
             //special validation for select and checbkox
             //checkbox
@@ -542,10 +542,10 @@
 
                 if(field.required === true || $this_val) {
                     //define regex for field types
-                    var regex_table = this.settings.input.regex_table;
+                    let regex_table = this.settings.input.regex_table;
 
                     if (field.field_data_type && field.field_data_type in regex_table) {
-                        var regex = regex_table[field.field_data_type];
+                        let regex = regex_table[field.field_data_type];
                         if (!regex.test($this_val)) {
                             is_valid = false;
                         }
@@ -566,36 +566,36 @@
          * @return {boolean}
          */
         ValidateForm: function (_fields, options) {
-            var defaults = {
+            let defaults = {
                 append_status: true,
                 focus_first_wrong: true,
                 fade_duration: 300,
                 clear_status_only: false,
                 clear_status_if_empty: false,
             };
-            var settings = $.extend({}, defaults, options);
+            let settings = $.extend({}, defaults, options);
 
-            var objThis = this;
+            let objThis = this;
 
-            var fields = _fields;
+            let fields = _fields;
 
             //return value. If all inputs are correctly validated, the value will remain true. If one fails, it switches to false
-            var is_valid = true;
+            let is_valid = true;
 
             /* --- Validation --- */
 
             //wrong inputs collection
-            var wrong_inputs = []; // {obj: null, message: null}
+            let wrong_inputs = []; // {obj: null, message: null}
 
-            for(var i = 0; i < fields.length; i++) {
-                var field = fields[i];
-                var field_valid = this.ValidateField(field);
+            for(let i = 0; i < fields.length; i++) {
+                let field = fields[i];
+                let field_valid = this.ValidateField(field);
 
-                var $this = field.obj;
-                var $this_container = field.container;//$this.closest(objThis.settings.input.input_container_class);
+                let $this = field.obj;
+                let $this_container = field.container;//$this.closest(objThis.settings.input.input_container_class);
 
                 //find and remove old status
-                var old_obj = $this_container.find('.' + form_obj_prefix + 'status');
+                let old_obj = $this_container.find('.' + form_obj_prefix + 'status');
 
                 //if appending new status, delete the old status immediately. Otherwise, fade it out slowly
                 if (settings.append_status) {
@@ -628,7 +628,7 @@
 
                         //add element signifying wrong input
                         if (settings.append_status) {
-                            var $wrong_input_obj = $('<span class="' + form_obj_prefix + 'status"></span>');
+                            let $wrong_input_obj = $('<span class="' + form_obj_prefix + 'status"></span>');
                             $wrong_input_obj.text(field.wrong_input_text); //this.settings.text_vars.wrong_input_text
                             $wrong_input_obj.hide();
 
@@ -658,12 +658,12 @@
         },
 
         SendDataReturn: function(options) {
-            var defaults = {
+            let defaults = {
                 reset_input: true,
                 message: '',
                 style: '',
             };
-            var settings = $.extend({}, defaults, options);
+            let settings = $.extend({}, defaults, options);
 
             if(settings.reset_input) {
                 this.ResetInput({clear_status_only: true});
@@ -673,12 +673,12 @@
         },
 
         ResetInput: function (options) {
-            var defaults = {
+            let defaults = {
                 clear_status_only: false,
             };
-            var settings = $.extend({}, defaults, options);
+            let settings = $.extend({}, defaults, options);
 
-            var form = this.form.obj;
+            let form = this.form.jq_obj;
             form[0].reset();
 
             //validate after resetting the form
@@ -692,12 +692,12 @@
          * @return {boolean}
          */
         SendData: function (options) {
-            var status = {success: false, message: 'SendData: Error (Default)'};
+            let status = {success: false, message: 'SendData: Error (Default)'};
 
-            var defaults = {
+            let defaults = {
                 url: this.settings.api.url,
                 api_custom: this.settings.api.custom,
-                data: this.form.obj.serialize(),
+                data: this.form.jq_obj.serialize(),
                 data_dictionary: this.settings.input.data_dictionary,
                 type: this.settings.data.form_method,
                 success_param: this.settings.api.param.success, //bool - true for success, false for failure
@@ -705,15 +705,15 @@
                 status_sending_text: this.settings.text_vars.status_sending,
                 send_headers: this.settings.data.send_headers
             };
-            var settings = $.extend(true, {}, defaults, options);
+            let settings = $.extend(true, {}, defaults, options);
 
             //remove all status messages
             this.StatusClear();
 
             //validate input
-            var validated_fields = this.ValidateForm(this.settings.input.fields);
-            var validated_agreements = this.ValidateForm(this.settings.input.agreements);
-            var validated = validated_fields && validated_agreements;
+            let validated_fields = this.ValidateForm(this.settings.input.fields);
+            let validated_agreements = this.ValidateForm(this.settings.input.agreements);
+            let validated = validated_fields && validated_agreements;
 
             //send form if validated
             if (validated) {
@@ -732,11 +732,11 @@
             return status;
         },
         SendDataAjax: function (options) {
-            var status = {success: false, message: 'SendDataAjax: Error (Default)'};
+            let status = {success: false, message: 'SendDataAjax: Error (Default)'};
 
             //set settings
-            var objThis = this;
-            var defaults = {
+            let objThis = this;
+            let defaults = {
                 url: '/',
                 type: 'POST',
                 api_custom: [],
@@ -760,18 +760,18 @@
                 }
                 */
             };
-            var settings = $.extend(true, {}, defaults, options);
+            let settings = $.extend(true, {}, defaults, options);
 
             //extend data from form with custom data
             if (settings.api_custom) {
-                var api_custom_length = settings.api_custom.length;
-                var custom_data_string = '';
+                let api_custom_length = settings.api_custom.length;
+                let custom_data_string = '';
 
                 if (settings.data.length > 0) {
                     custom_data_string += '&';
                 }
 
-                for (var i = 0; i < api_custom_length; i++) {
+                for (let i = 0; i < api_custom_length; i++) {
                     custom_data_string += settings.api_custom[i].name + '=' + settings.api_custom[i].value;
 
                     if (i < api_custom_length - 1) {
@@ -783,9 +783,9 @@
             }
 
             //use a custom dictionary specific to API to convert key names to the valid values
-            var data_dictionary_keys = Object.keys(settings.data_dictionary);
-            for (var i = 0; i < data_dictionary_keys.length; i++) {
-                var regex = settings.data_dictionary[data_dictionary_keys[i]];
+            let data_dictionary_keys = Object.keys(settings.data_dictionary);
+            for (let i = 0; i < data_dictionary_keys.length; i++) {
+                let regex = settings.data_dictionary[data_dictionary_keys[i]];
                 console.log(data_dictionary_keys[i] + ' > ' + regex);
                 //use regex to replace form field names into those specified in the dictionary
                 settings.data = settings.data.replace(data_dictionary_keys[i], regex);
@@ -821,13 +821,13 @@
                     dataType: 'json',
                     processData: false,
                     success: function (data) {
-                        var response_success = false;
-                        var return_message;
+                        let response_success = false;
+                        let return_message;
 
                         console.log(data);
 
                         if (data[settings.return_param]) {
-                            for (var index in data[settings.return_param]) {
+                            for (let index in data[settings.return_param]) {
                                 console.log(data[settings.return_param][index]);
                             }
 
@@ -924,15 +924,15 @@
 
         StatusAdd: function(_message, options) {
             //set settings
-            var defaults = {
+            let defaults = {
                 fade_duration: 300,
                 style: ''
             };
-            var settings = $.extend({}, defaults, options);
+            let settings = $.extend({}, defaults, options);
 
             /* --- */
 
-            var message = $('<p></p>');
+            let message = $('<p></p>');
             message.text(_message);
             message.appendTo(this.form.status);
             message.hide();
@@ -964,8 +964,8 @@
          */
         objSortByPositionInDOM: function (input, attr, attr2) {
             //sort by position in DOM
-            var _input = input;
-            var output;
+            let _input = input;
+            let output;
             if(attr && attr2) {
                 output = _input.sort(function (a, b) {
                     if (a[attr][attr2][0] === b[attr][attr2][0]) return 0;
@@ -1015,11 +1015,11 @@
     // A really lightweight plugin wrapper around the constructor,
     // preventing against multiple instantiations
     $.fn[pluginName] = function (options) {
-        var instances = [];
+        let instances = [];
 
         this.each(function () {
             if (!$.data(this, "plugin_" + pluginName)) {
-                var instance = new Plugin(this, options);
+                let instance = new Plugin(this, options);
                 $.data(this, "plugin_" +
                     pluginName, instance);
                 instances.push(instance);

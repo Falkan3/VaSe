@@ -103,6 +103,11 @@
             },
             callbacks: {
                 onSend: {
+                    // before: {
+                    //     function: null,
+                    //     this: this,
+                    //     parameters: null,
+                    // },
                     // success: {
                     //     function: null,
                     //     this: this,
@@ -292,14 +297,19 @@
 
             //get data variables from html
             let field_data = $this.data(pluginNameLower);
+
+            let input_container = '';
+            let input_type = '';
+            let field_data_type = '';
+            let wrong_input_text = '';
+
             if(field_data) {
                 //field_data = field_data.toJSON();
+                input_container = $this.closest(objThis.settings.input.input_container_class);
+                input_type = $this.attr('type');
+                field_data_type = field_data.field_data_type; //$this.data('vase-field-type');
 
-                var input_container = $this.closest(objThis.settings.input.input_container_class);
-                var input_type = $this.attr('type');
-                var field_data_type = field_data.field_data_type; //$this.data('vase-field-type');
-
-                var wrong_input_text = field_data.wrong_input_text; //$this.data('vase-wrong-text');
+                wrong_input_text = field_data.wrong_input_text; //$this.data('vase-wrong-text');
                 if(!wrong_input_text) {
                     wrong_input_text = objThis.settings.text_vars.wrong_input_text;
                 }
@@ -362,14 +372,20 @@
 
             //get data variables from html
             let field_data = $this.data(pluginNameLower);
+
+            let input_container = '';
+            let input_type = '';
+            let field_data_type = '';
+            let wrong_input_text = '';
+
             if(field_data) {
                 //field_data = field_data.toJSON();
 
-                var input_container = $this.closest(objThis.settings.input.input_container_class);
-                var input_type = $this.attr('type');
-                var field_data_type = field_data.field_data_type; //$this.data('vase-field-type');
+                input_container = $this.closest(objThis.settings.input.input_container_class);
+                input_type = $this.attr('type');
+                field_data_type = field_data.field_data_type; //$this.data('vase-field-type');
 
-                var wrong_input_text = field_data.wrong_input_text; //$this.data('vase-wrong-text');
+                wrong_input_text = field_data.wrong_input_text; //$this.data('vase-wrong-text');
                 if(!wrong_input_text) {
                     wrong_input_text = objThis.settings.text_vars.wrong_input_text;
                 }
@@ -454,6 +470,11 @@
 
             //form submit
             this.form.jq_obj.on('submit', function (e) {
+                //callback from obj settings: onSend:before
+                if (objThis.settings.callbacks.onSend.before && objThis.settings.callbacks.onSend.before.function && $.isFunction(objThis.settings.callbacks.onSend.before.function)) {
+                    objThis.settings.callbacks.onSend.before.function.apply(objThis.settings.callbacks.onSend.before.this, [$.extend(true, {}, objThis.settings.callbacks.onSend.before.parameters)]);
+                }
+
                 let status = objThis.SendData({
                     callback: {
                         // success: objThis.settings.callbacks.onSend.success,

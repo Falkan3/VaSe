@@ -149,13 +149,13 @@
 
     function test1(input) {
         console.log(input);
-        x.SendDataReturn({
+        x._methods.SendDataReturn(x, {
             reset_input: false, message: input.statusText, style: 'error'
         });
     }
     function test2(input) {
         console.log(input);
-        y.SendDataReturn({
+        y._methods.SendDataReturn(y, {
             reset_input: false, message: input.statusText, style: 'error'
         });
     }

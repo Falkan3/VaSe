@@ -425,7 +425,7 @@
             for(let i = 0; i < instance.settings.input.fields.length; i++) {
                 let field = instance.settings.input.fields[i];
                 field.obj.data(instance._objPrefix + 'index', i);
-                field.obj.on('input', function (e) {
+                field.obj.on('input blur paste', function (e) {
                     let $this = $(this);
                     let index = $this.data(instance._objPrefix + 'index');
                     //validate input

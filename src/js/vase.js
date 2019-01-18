@@ -689,8 +689,6 @@
                 wrong_inputs[0].field.obj.focus();
             }
 
-            //xxx
-
             /* --- /Validation --- */
 
             return is_valid;
@@ -751,7 +749,7 @@
 
             //validate input
             let validated_fields = instance._methods.ValidateForm(instance, instance.settings.input.fields);
-            let validated_agreements = instance._methods.ValidateForm(instance, instance.settings.input.agreements);
+            let validated_agreements = instance._methods.ValidateForm(instance, instance.settings.input.agreements, {focus_first_wrong: false});
             let validated = validated_fields && validated_agreements;
 
             //send form if validated

@@ -437,8 +437,6 @@
 
                     //add class has-content if the input isn't empty
                     instance._methods.formCheckIfInputHasContent(instance, $this);
-
-                    return false;
                 });
 
                 instance._methods.formCheckIfInputHasContent(instance, field.obj);
@@ -456,8 +454,6 @@
                     if (validated) {
                         console.log('agreement validation successful');
                     }
-
-                    return false;
                 });
             }
 

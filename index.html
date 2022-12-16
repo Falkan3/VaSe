@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>VaSe form validation</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- Jquery -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+	<!-- Input mask -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js" crossorigin="anonymous"></script>
+	<!-- Animate -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" integrity="sha256-j+P6EZJVrbXgwSR5Mx+eCS6FvP9Wq27MBRC/ogVriY0=" crossorigin="anonymous" />
+
+	<!-- Main -->
+	<script src="../src/js/vase.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="../src/css/style.css">
+	<!-- /Main -->
+
+	<link href="https://fonts.googleapis.com/css?family=Oswald:300,400,500&amp;subset=latin-ext" rel="stylesheet">
+</head>
+<body>
+
+<div class="wrapper">
+	<div class="container">
+		<form id="form1" method="post" class="style-dark" data-vase-element-type="form">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="input input_text">
+							<label for="fld_name">Name<span class="asterisk">*</span></label>
+							<div class="cut-off-corner">
+								<input id="fld_name"
+									   type="text"
+									   name="fld_name"
+									   required="required"
+									   data-vase='{"element_type": "field", "field_data_type": "name", "wrong_input_text": "Incorrect name format"}' />
+							</div>
+						</div>
+					</div>
+
+					<div class="col-xs-12">
+						<div class="input input_text">
+							<label for="fld_email">Email<span class="asterisk">*</span></label>
+							<div class="cut-off-corner">
+								<input id="fld_email" type="email" name="fld_email" required="required" data-vase='{"element_type": "field", "wrong_input_text": "Incorrect E-mail format"}' />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="input input_tel">
+							<label for="fld_phone">Phone<span class="asterisk">*</span></label>
+							<div class="cut-off-corner">
+								<input id="fld_phone" type="tel" name="fld_phone" required="required" data-vase='{"element_type": "field", "wrong_input_text": "Incorrect phone number format"}' />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="input input_checkbox">
+							<label class="checkbox-inline" for="agreement_1">
+								<input id="agreement_1" type="checkbox" name="agreement_1" value="1" required="required" data-vase='{"element_type": "agreement", "wrong_input_text": "Must be checked"}' />
+								Agreement 1<span class="asterisk">*</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="input input_checkbox">
+							<label class="checkbox-inline" for="agreement_2">
+								<input id="agreement_2" type="checkbox" name="agreement_2" value="1" data-vase='{"element_type": "agreement"}' />
+								Agreement 2
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="input input_button">
+							<button type="submit" class="button" data-vase='{"element_type": "submit"}'>Send</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="status" data-vase='{"element_type": "status"}'></div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<form id="form2" method="post" class="style-dark" data-vase-element-type="form">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="input input_tel">
+							<label for="fld_phone2">Phone<span class="asterisk">*</span></label>
+							<div class="cut-off-corner">
+								<input id="fld_phone2" type="tel" name="fld_phone" required="required" data-vase='{"element_type": "field", "wrong_input_text": "Incorrect phone number format"}' />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="input input_checkbox">
+							<label class="checkbox-inline" for="agreement2_1">
+								<input id="agreement2_1" type="checkbox" name="agreement_1" value="1" required="required" data-vase='{"element_type": "agreement", "wrong_input_text": "Must be checked"}' />
+								Agreement 1<span class="asterisk">*</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="input input_button">
+							<button type="submit" class="button" data-vase='{"element_type": "submit"}'>Send</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="status" data-vase='{"element_type": "status"}'></div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+    let x;
+    let y;
+
+    function test1(input) {
+        console.log(input);
+        x._methods.SendDataReturn(x, {
+            reset_input: false, message: input.statusText, style: 'error'
+        });
+    }
+    function test2(input) {
+        console.log(input);
+        y._methods.SendDataReturn(y, {
+            reset_input: false, message: input.statusText, style: 'error'
+        });
+    }
+
+    $(function () {
+        x = $('#form1[data-vase-element-type="form"]').VaSe({
+            input: {
+                correct_input_class: 'correct-input',
+                wrong_input_class: 'wrong-input',
+                /*
+                fields: [
+                    {
+                        obj: $('input').first(),
+                        wrong_input_text: 'test'
+                    }
+                ]
+                */
+            },
+            callbacks: {
+                onSend: {
+                    before: {
+                        function: test1,
+                        parameters: ['sending form callback...'],
+                        this: this,
+                    },
+                    success: {
+                        function: test1,
+                        parameters: ['success form callback'],
+                        this: this,
+                    },
+                    error: {
+                        function: test1,
+                        parameters: ['error form callback'],
+                        this: this,
+                    }
+                }
+            }
+        });
+        y = $('#form2[data-vase-element-type="form"]').VaSe({
+            input: {
+                correct_input_class: 'correct-input',
+                wrong_input_class: 'wrong-input',
+                /*
+                fields: [
+                    {
+                        obj: $('input').first(),
+                        wrong_input_text: 'test'
+                    }
+                ]
+                */
+            },
+            callbacks: {
+                onSend: {
+                    before: {
+                        function: test2,
+                        parameters: ['sending form callback...'],
+                        this: this,
+                    },
+                    success: {
+                        function: test2,
+                        parameters: ['success form callback'],
+                        this: this,
+                    },
+                    error: {
+                        function: test2,
+                        parameters: ['error form callback'],
+                        this: this,
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

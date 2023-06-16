@@ -773,14 +773,14 @@
 
                 //callback from obj settings
                 if (instance.settings.callbacks.onValidate.success && instance.settings.callbacks.onValidate.success.function && $.isFunction(instance.settings.callbacks.onValidate.success.function)) {
-                    instance.settings.callbacks.onValidate.success.function.apply(instance.settings.callbacks.onValidate.success.this, [$.extend(true, {}, data, instance.settings.callbacks.onValidate.success.parameters)]);
+                    instance.settings.callbacks.onValidate.success.function.apply(instance.settings.callbacks.onValidate.success.this, [$.extend(true, {}, instance.settings.callbacks.onValidate.success.parameters)]);
                 }
             } else {
                 status = {success: false, message: 'SendData: Error (Validation)'};
 
                 //callback from obj settings
                 if (instance.settings.callbacks.onValidate.error && instance.settings.callbacks.onValidate.error.function && $.isFunction(instance.settings.callbacks.onValidate.error.function)) {
-                    instance.settings.callbacks.onValidate.error.function.apply(instance.settings.callbacks.onValidate.error.this, [$.extend(true, {}, data, instance.settings.callbacks.onValidate.error.parameters)]);
+                    instance.settings.callbacks.onValidate.error.function.apply(instance.settings.callbacks.onValidate.error.this, [$.extend(true, {}, instance.settings.callbacks.onValidate.error.parameters)]);
                 }
             }
 

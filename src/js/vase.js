@@ -102,23 +102,35 @@
                 data_dictionary: {} //'sc_fld_telephone': 'phone'
             },
             callbacks: {
-                onSend: {
-                    // before: {
-                    //     function: null,
-                    //     this: this,
-                    //     parameters: null,
-                    // },
-                    // success: {
-                    //     function: null,
-                    //     this: this,
-                    //     parameters: null,
-                    // },
-                    // error: {
-                    //     function: null,
-                    //     this: this,
-                    //     parameters: null,
-                    // }
-                }
+                // onSend: {
+                //     before: {
+                //         function: null,
+                //         this: this,
+                //         parameters: null,
+                //     },
+                //     success: {
+                //         function: null,
+                //         this: this,
+                //         parameters: null,
+                //     },
+                //     error: {
+                //         function: null,
+                //         this: this,
+                //         parameters: null,
+                //     }
+                // },
+                // onValidate: {
+                //     success: {
+                //         function: null,
+                //         this: this,
+                //         parameters: null,
+                //     },
+                //     error: {
+                //         function: null,
+                //         this: this,
+                //         parameters: null,
+                //     }
+                // }
             }
         };
 
@@ -290,7 +302,7 @@
 
             };
             let settings = $.extend({}, defaults, _options);
-            
+
             let $this = _ele; //$(this);
 
             //get data variables from html
@@ -362,7 +374,7 @@
 
             };
             let settings = $.extend({}, defaults, _options);
-            
+
             let $this = _ele; //$(this);
 
             //get data variables from html
@@ -758,8 +770,18 @@
                 instance._methods.StatusAdd(instance, settings.status_sending_text, {});
 
                 status = instance._methods.SendDataAjax(instance, settings);
+
+                //callback from obj settings
+                if (instance.settings.callbacks.onValidate.success && instance.settings.callbacks.onValidate.success.function && $.isFunction(instance.settings.callbacks.onValidate.success.function)) {
+                    instance.settings.callbacks.onValidate.success.function.apply(instance.settings.callbacks.onValidate.success.this, [$.extend(true, {}, data, instance.settings.callbacks.onValidate.success.parameters)]);
+                }
             } else {
                 status = {success: false, message: 'SendData: Error (Validation)'};
+
+                //callback from obj settings
+                if (instance.settings.callbacks.onValidate.error && instance.settings.callbacks.onValidate.error.function && $.isFunction(instance.settings.callbacks.onValidate.error.function)) {
+                    instance.settings.callbacks.onValidate.error.function.apply(instance.settings.callbacks.onValidate.error.this, [$.extend(true, {}, data, instance.settings.callbacks.onValidate.error.parameters)]);
+                }
             }
 
             return status;

@@ -472,7 +472,7 @@
             //form submit
             instance.form.jq_obj.on('submit', function (e) {
                 //callback from obj settings: onSend:before
-                if (instance.settings.callbacks.onSend.before && instance.settings.callbacks.onSend.before.function && $.isFunction(instance.settings.callbacks.onSend.before.function)) {
+                if (instance.settings.callbacks.onSend && instance.settings.callbacks.onSend.before && instance.settings.callbacks.onSend.before.function && $.isFunction(instance.settings.callbacks.onSend.before.function)) {
                     instance.settings.callbacks.onSend.before.function.apply(instance.settings.callbacks.onSend.before.this, [$.extend(true, {}, instance.settings.callbacks.onSend.before.parameters)]);
                 }
 
@@ -772,14 +772,14 @@
                 status = instance._methods.SendDataAjax(instance, settings);
 
                 //callback from obj settings
-                if (instance.settings.callbacks.onValidate.success && instance.settings.callbacks.onValidate.success.function && $.isFunction(instance.settings.callbacks.onValidate.success.function)) {
+                if (instance.settings.callbacks.onValidate && instance.settings.callbacks.onValidate.success && instance.settings.callbacks.onValidate.success.function && $.isFunction(instance.settings.callbacks.onValidate.success.function)) {
                     instance.settings.callbacks.onValidate.success.function.apply(instance.settings.callbacks.onValidate.success.this, [$.extend(true, {}, instance.settings.callbacks.onValidate.success.parameters)]);
                 }
             } else {
                 status = {success: false, message: 'SendData: Error (Validation)'};
 
                 //callback from obj settings
-                if (instance.settings.callbacks.onValidate.error && instance.settings.callbacks.onValidate.error.function && $.isFunction(instance.settings.callbacks.onValidate.error.function)) {
+                if (instance.settings.callbacks.onValidate && instance.settings.callbacks.onValidate.error && instance.settings.callbacks.onValidate.error.function && $.isFunction(instance.settings.callbacks.onValidate.error.function)) {
                     instance.settings.callbacks.onValidate.error.function.apply(instance.settings.callbacks.onValidate.error.this, [$.extend(true, {}, instance.settings.callbacks.onValidate.error.parameters)]);
                 }
             }
@@ -924,7 +924,7 @@
                                 settings.callback.success.function.apply(settings.callback.success.instance, settings.callback.success.parameters);
                             }
                             //callback from obj settings
-                            if (instance.settings.callbacks.onSend.success && instance.settings.callbacks.onSend.success.function && $.isFunction(instance.settings.callbacks.onSend.success.function)) {
+                            if (instance.settings.callbacks.onSend && instance.settings.callbacks.onSend.success && instance.settings.callbacks.onSend.success.function && $.isFunction(instance.settings.callbacks.onSend.success.function)) {
                                 instance.settings.callbacks.onSend.success.function.apply(instance.settings.callbacks.onSend.success.this, [$.extend(true, {}, data, instance.settings.callbacks.onSend.success.parameters)]);
                             }
                         } else {
@@ -967,7 +967,7 @@
                             settings.callback.error.function.apply(settings.callback.error.this, settings.callback.error.parameters);
                         }
                         //callback from obj settings
-                        if (instance.settings.callbacks.onSend.error && instance.settings.callbacks.onSend.error.function && $.isFunction(instance.settings.callbacks.onSend.error.function)) {
+                        if (instance.settings.callbacks.onSend && instance.settings.callbacks.onSend.error && instance.settings.callbacks.onSend.error.function && $.isFunction(instance.settings.callbacks.onSend.error.function)) {
                             instance.settings.callbacks.onSend.error.function.apply(instance.settings.callbacks.onSend.error.this, [$.extend(true, {}, data, instance.settings.callbacks.onSend.error.parameters)]);
                         }
                     }
